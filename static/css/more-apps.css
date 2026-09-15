@@ -1,0 +1,43 @@
+:root { --bg:#f7f8fa; --panel:#fff; --soft:#f1f4f8; --line:#e8ecf2; --line-strong:#dbe1ea; --text:#0f172a; --muted:#64748b; --faint:#94a3b8; --accent:#0f172a; }
+body.studio-theme-dark, html.studio-theme-dark body { --bg:#0e1014; --panel:#1c1e26; --soft:#272a33; --line:#323540; --line-strong:#3f424d; --text:#e8e8ea; --muted:#a4adbf; --faint:#7a8497; --accent:#f5f6f8; }
+* { box-sizing:border-box; }
+body { margin:0; min-height:100vh; background:var(--bg); color:var(--text); font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; -webkit-font-smoothing:antialiased; }
+button { font-family:inherit; cursor:pointer; border:0; background:transparent; color:inherit; }
+
+.more-page { min-height:100vh; padding:32px 24px 80px; }
+.more-wrap { max-width:1180px; margin:0 auto; }
+
+.more-head { display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; padding:0 4px 24px; }
+.more-title { font-size:26px; line-height:1.05; font-weight:900; letter-spacing:-.015em; }
+.more-sub { margin-top:8px; color:var(--muted); font-size:12.5px; line-height:1.55; font-weight:600; max-width:560px; }
+.more-status { color:var(--muted); font-size:11.5px; font-weight:700; letter-spacing:.02em; min-height:16px; opacity:0; transition:opacity .2s ease; }
+.more-status.is-visible { opacity:1; }
+
+.more-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(288px,1fr)); gap:16px; align-items:stretch; }
+
+.app-card { display:flex; flex-direction:column; gap:12px; padding:18px; background:var(--panel); border:1px solid var(--line); border-radius:16px; transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease; }
+.app-card:hover { transform:translateY(-2px); border-color:var(--line-strong); box-shadow:0 10px 26px rgba(15,23,42,.10); }
+body.studio-theme-dark .app-card:hover { box-shadow:0 10px 26px rgba(0,0,0,.32); }
+
+.app-top { display:flex; align-items:center; gap:12px; }
+.app-icon { width:44px; height:44px; flex:0 0 auto; border-radius:12px; background:var(--soft); border:1px solid var(--line); color:var(--text); display:flex; align-items:center; justify-content:center; }
+.app-icon svg { width:22px; height:22px; }
+.app-heading { min-width:0; flex:1; }
+.app-name { font-size:14.5px; font-weight:900; letter-spacing:-.01em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.app-tag { display:inline-block; margin-top:4px; padding:2px 7px; border-radius:6px; background:var(--soft); color:var(--muted); font-size:9.5px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; }
+.app-desc { flex:1; color:var(--muted); font-size:12px; line-height:1.6; font-weight:600; }
+.app-path { display:flex; align-items:center; gap:6px; color:var(--faint); font-size:10.5px; font-weight:700; font-family:ui-monospace,Menlo,Consolas,monospace; word-break:break-all; }
+.app-path svg { width:12px; height:12px; flex:0 0 auto; }
+
+.app-actions { display:flex; gap:8px; }
+.app-btn { height:34px; padding:0 13px; border-radius:10px; border:1px solid var(--line); background:var(--panel); color:var(--muted); display:inline-flex; align-items:center; justify-content:center; gap:6px; font-size:11.5px; font-weight:800; transition:all .15s ease; }
+.app-btn:hover { color:var(--text); border-color:var(--text); }
+.app-btn svg { width:14px; height:14px; }
+.app-btn.is-primary { background:var(--accent); color:var(--bg); border-color:var(--accent); }
+
+.app-card.is-placeholder { border-style:dashed; align-items:center; justify-content:center; text-align:center; gap:8px; min-height:180px; }
+.app-card.is-placeholder:hover { transform:none; box-shadow:none; }
+.app-placeholder-icon { width:38px; height:38px; border-radius:11px; background:var(--soft); color:var(--faint); display:flex; align-items:center; justify-content:center; }
+.app-placeholder-icon svg { width:20px; height:20px; }
+.app-placeholder-title { font-size:12.5px; font-weight:800; color:var(--muted); }
+.app-placeholder-desc { font-size:11px; font-weight:600; color:var(--faint); line-height:1.55; }

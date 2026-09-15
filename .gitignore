@@ -1,0 +1,22 @@
+# ---------- 敏感信息 / 本地配置 ----------
+# 渠道密钥（ModelScope / RunningHub 等）
+API/.env
+.env
+*.env
+# 运行时数据：渠道配置、对话记录、画布、素材索引
+data/
+
+# ---------- 运行时产物 ----------
+output/
+assets/
+__pycache__/
+*.py[cod]
+*.pyo
+*.log
+.DS_Store
+Thumbs.db
+
+# ---------- 内置运行时 / 离线依赖包（体积大，可从网络获取） ----------
+python/
+packages/
+CLI/**/vendor/

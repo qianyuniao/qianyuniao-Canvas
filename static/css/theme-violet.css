@@ -1,0 +1,3330 @@
+/* =============================================================
+   Violet Dark Skin —— 深色主题的紫色皮肤层
+   -------------------------------------------------------------
+   作用：在 theme.css 之后加载，只覆盖深色主题（.studio-theme-dark）
+        的配色与质感到「深空紫」风格，不修改任何业务逻辑。
+
+   特点：
+     1. 全部选择器都限定在深色主题下，浅色主题不受影响；
+     2. 通过更靠后的加载顺序 + 等价/更高特异度覆盖 theme.css；
+     3. 只覆盖颜色、圆角、阴影、边框，不动布局与尺寸；
+     4. 想还原原始配色，删除各页面对本文件的 <link> 即可。
+   ============================================================= */
+
+/* ---------- 0. 调色板 ---------- */
+:root {
+    --v-page: #08070f;
+    --v-page-2: #0b0a13;
+    --v-card: #101019;
+    --v-card-2: #16161f;
+    --v-soft: #0c0c15;
+    --v-soft-2: #1c1c28;
+    --v-line: #23232e;
+    --v-line-2: #312f46;
+    --v-text: #eceaf6;
+    /* 次级文字：深底上约 7.8:1（原 #9d9db4 约 6.9:1） */
+    --v-dim: #a4a4bd;
+    /* 弱化文字：深底上约 6.0:1（原 #71718a 仅 3.4:1，是小字看不清的主因） */
+    --v-faint: #8f8fa8;
+    /* 主色：白字在其上 5.3:1（原 #7c5cff 仅 4.35:1，低于 AA 门槛） */
+    --v-accent: #7248f5;
+    --v-accent-hi: #8e6bff;
+    --v-accent-lo: #5f36e6;
+    --v-accent-soft: rgba(114, 72, 245, .18);
+    --v-accent-line: rgba(114, 72, 245, .48);
+    --v-glow: 0 8px 24px rgba(114, 72, 245, .34);
+
+    /* 参考图新增：青色点缀（次级强调） */
+    --v-cyan: #22d3ee;
+    --v-cyan-hi: #67e8f9;
+    --v-cyan-soft: rgba(34, 211, 238, .10);
+    --v-cyan-line: rgba(34, 211, 238, .42);
+
+    /* 参考图新增：卡片紫调描边 */
+    --v-violet-line: rgba(139, 92, 246, .20);
+    --v-violet-line-hi: rgba(139, 92, 246, .45);
+}
+
+/* ---------- 1. 页面底色与文字 ---------- */
+html.studio-theme-dark,
+html.studio-theme-dark body,
+body.studio-theme-dark {
+    background: var(--v-page) !important;
+    background-color: var(--v-page) !important;
+    color: var(--v-text) !important;
+}
+
+body.studio-theme-dark,
+html.studio-theme-dark body {
+    --bg: var(--v-page);
+    --bg-base: var(--v-page);
+    --page: var(--v-page);
+    --sidebar-bg: var(--v-page-2);
+    --stage-bg: var(--v-soft);
+    --card: var(--v-card);
+    --card-solid: var(--v-card);
+    --soft: var(--v-soft);
+    --soft-2: var(--v-soft-2);
+    --panel: rgba(20, 20, 29, .92);
+    --text: var(--v-text);
+    --text-main: var(--v-text);
+    --accent: var(--v-accent);
+    --border: var(--v-line);
+    --stage-border: var(--v-line);
+    --line: var(--v-line);
+    --line-2: var(--v-line-2);
+    --muted: var(--v-dim);
+    /* 各页面自己的次级文字变量，不映射的话会残留浅色主题的灰（对比度不足） */
+    --faint: var(--v-faint);
+    --chat-muted: var(--v-dim);
+    --chat-faint: var(--v-faint);
+    --nav-hover-bg: var(--v-card);
+    --monitor-bg: rgba(20, 20, 29, .86);
+    --monitor-border: rgba(255, 255, 255, .07);
+    --monitor-shadow: rgba(0, 0, 0, .42);
+    --divider: rgba(255, 255, 255, .10);
+    --scrollbar: #2e2e42;
+    --scrollbar-hover: var(--v-accent);
+    --author-name: var(--v-text);
+    --social-icon: var(--v-faint);
+    --strong: var(--v-accent);
+    --strong-text: #fff;
+    --grid: rgba(148, 148, 190, .14);
+}
+
+/* ---------- 2. 应用外框：侧栏 / 舞台 / 外壳 ---------- */
+html.studio-theme-dark body .app-shell,
+html.studio-theme-dark body .sidebar,
+html.studio-theme-dark body .shell,
+body.studio-theme-dark .app-shell,
+body.studio-theme-dark .sidebar,
+body.studio-theme-dark .shell {
+    background: var(--v-page) !important;
+    background-color: var(--v-page) !important;
+    border-color: var(--v-line) !important;
+}
+
+html.studio-theme-dark body .sidebar,
+body.studio-theme-dark .sidebar {
+    background: var(--v-page-2) !important;
+}
+
+html.studio-theme-dark body .stage,
+body.studio-theme-dark .stage {
+    background: var(--v-page) !important;
+    background-color: var(--v-page) !important;
+    border-color: var(--v-line) !important;
+    box-shadow: inset 0 0 60px rgba(124, 92, 255, .04) !important;
+}
+
+html.studio-theme-dark body .shell .board,
+body.studio-theme-dark .shell .board {
+    background-color: var(--v-page) !important;
+    background-image: radial-gradient(rgba(148, 148, 190, .13) 1px, transparent 1px) !important;
+}
+
+html.studio-theme-dark body .shell .topbar,
+body.studio-theme-dark .shell .topbar,
+html.studio-theme-dark body .topbar,
+body.studio-theme-dark .topbar {
+    background: transparent !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+    border-bottom-color: var(--v-line) !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+}
+
+/* ---------- 3. 面板与卡片：统一为紫调深色 ---------- */
+html.studio-theme-dark body .console-card,
+html.studio-theme-dark body .nano-input,
+html.studio-theme-dark body .upload-item,
+html.studio-theme-dark body .result-frame,
+html.studio-theme-dark body .masonry-item,
+html.studio-theme-dark body .work-panel,
+html.studio-theme-dark body .setting-row,
+html.studio-theme-dark body .tool-panel,
+html.studio-theme-dark body .control-panel,
+html.studio-theme-dark body .engine-panel,
+html.studio-theme-dark body .model-panel,
+html.studio-theme-dark body .gate-panel,
+html.studio-theme-dark body .composer,
+html.studio-theme-dark body .history-popover,
+html.studio-theme-dark body .thread-item,
+html.studio-theme-dark body .lightbox-card,
+html.studio-theme-dark body #lightboxCard,
+html.studio-theme-dark body .output-preview,
+html.studio-theme-dark body .selection-hub,
+html.studio-theme-dark body .create-menu,
+html.studio-theme-dark body .emoji-picker,
+html.studio-theme-dark body .action-btn,
+html.studio-theme-dark body .canvas-item,
+html.studio-theme-dark body .canvas-open,
+body.studio-theme-dark .console-card,
+body.studio-theme-dark .nano-input,
+body.studio-theme-dark .upload-item,
+body.studio-theme-dark .result-frame,
+body.studio-theme-dark .masonry-item,
+body.studio-theme-dark .work-panel,
+body.studio-theme-dark .setting-row,
+body.studio-theme-dark .tool-panel,
+body.studio-theme-dark .control-panel,
+body.studio-theme-dark .engine-panel,
+body.studio-theme-dark .model-panel,
+body.studio-theme-dark .gate-panel,
+body.studio-theme-dark .composer,
+body.studio-theme-dark .history-popover,
+body.studio-theme-dark .thread-item,
+body.studio-theme-dark .lightbox-card,
+body.studio-theme-dark #lightboxCard,
+body.studio-theme-dark .output-preview,
+body.studio-theme-dark .selection-hub,
+body.studio-theme-dark .create-menu,
+body.studio-theme-dark .emoji-picker,
+body.studio-theme-dark .action-btn,
+body.studio-theme-dark .canvas-item,
+body.studio-theme-dark .canvas-open {
+    background: var(--v-card) !important;
+    background-color: var(--v-card) !important;
+    border-color: var(--v-line) !important;
+    color: var(--v-text) !important;
+}
+
+/* 次级 / 内嵌面 */
+html.studio-theme-dark body .bg-gray-100,
+html.studio-theme-dark body .bg-gray-200,
+html.studio-theme-dark body .bg-slate-100,
+html.studio-theme-dark body .select-shell,
+html.studio-theme-dark body .model-pill,
+html.studio-theme-dark body .ratio-grid,
+html.studio-theme-dark body .resolution-toggle,
+html.studio-theme-dark body .mode-switch,
+html.studio-theme-dark body .mini-ratio,
+html.studio-theme-dark body .size-select,
+html.studio-theme-dark body .size-custom,
+html.studio-theme-dark body .llm-system,
+html.studio-theme-dark body .llm-chat-input,
+html.studio-theme-dark body .llm-chat-log,
+html.studio-theme-dark body .llm-output,
+html.studio-theme-dark body .llm-chat-pane,
+html.studio-theme-dark body .tool-btn,
+html.studio-theme-dark body .select-lite,
+html.studio-theme-dark body .gen-count-row,
+html.studio-theme-dark body .seg,
+html.studio-theme-dark body .llm-mode,
+html.studio-theme-dark body .mode-tabs,
+html.studio-theme-dark body .gen-settings,
+html.studio-theme-dark body .comfy-settings,
+body.studio-theme-dark .bg-gray-100,
+body.studio-theme-dark .bg-gray-200,
+body.studio-theme-dark .bg-slate-100,
+body.studio-theme-dark .select-shell,
+body.studio-theme-dark .model-pill,
+body.studio-theme-dark .ratio-grid,
+body.studio-theme-dark .resolution-toggle,
+body.studio-theme-dark .mode-switch,
+body.studio-theme-dark .mini-ratio,
+body.studio-theme-dark .size-select,
+body.studio-theme-dark .size-custom,
+body.studio-theme-dark .llm-system,
+body.studio-theme-dark .llm-chat-input,
+body.studio-theme-dark .llm-chat-log,
+body.studio-theme-dark .llm-output,
+body.studio-theme-dark .llm-chat-pane,
+body.studio-theme-dark .tool-btn,
+body.studio-theme-dark .select-lite,
+body.studio-theme-dark .gen-count-row,
+body.studio-theme-dark .seg,
+body.studio-theme-dark .llm-mode,
+body.studio-theme-dark .mode-tabs,
+body.studio-theme-dark .gen-settings,
+body.studio-theme-dark .comfy-settings {
+    background: var(--v-soft) !important;
+    background-color: var(--v-soft) !important;
+    border-color: var(--v-line) !important;
+    color: var(--v-text) !important;
+}
+
+/* Tailwind 浅色工具类兜底 → 深色卡片 */
+html.studio-theme-dark body .bg-white,
+html.studio-theme-dark body .bg-white\/90,
+html.studio-theme-dark body .bg-white\/95,
+html.studio-theme-dark body .bg-gray-50,
+html.studio-theme-dark body .bg-gray-50\/50,
+html.studio-theme-dark body .bg-slate-50,
+html.studio-theme-dark body .bg-\[\#f8f8f9\],
+html.studio-theme-dark body .bg-\[\#fafafa\],
+html.studio-theme-dark body .bg-\[\#fbfdff\],
+html.studio-theme-dark body #lightbox .bg-white,
+html.studio-theme-dark body #compareContainer,
+html.studio-theme-dark body #compareContainerKlein,
+html.studio-theme-dark body #lightboxImg,
+body.studio-theme-dark .bg-white,
+body.studio-theme-dark .bg-white\/90,
+body.studio-theme-dark .bg-white\/95,
+body.studio-theme-dark .bg-gray-50,
+body.studio-theme-dark .bg-gray-50\/50,
+body.studio-theme-dark .bg-slate-50,
+body.studio-theme-dark .bg-\[\#f8f8f9\],
+body.studio-theme-dark .bg-\[\#fafafa\],
+body.studio-theme-dark .bg-\[\#fbfdff\],
+body.studio-theme-dark #lightbox .bg-white,
+body.studio-theme-dark #compareContainer,
+body.studio-theme-dark #compareContainerKlein,
+body.studio-theme-dark #lightboxImg {
+    background-color: var(--v-card) !important;
+    border-color: var(--v-line) !important;
+    color: var(--v-text) !important;
+}
+
+/* 群组空面（画布节点内部等） */
+html.studio-theme-dark body .shell .blank-image,
+html.studio-theme-dark body .shell .input-item,
+html.studio-theme-dark body .shell .prompt-node textarea,
+html.studio-theme-dark body .shell .model-input,
+html.studio-theme-dark body .shell .image-node img,
+html.studio-theme-dark body .shell .output-grid img,
+html.studio-theme-dark body .shell .output-preview img,
+body.studio-theme-dark .shell .blank-image,
+body.studio-theme-dark .shell .input-item,
+body.studio-theme-dark .shell .prompt-node textarea,
+body.studio-theme-dark .shell .model-input,
+body.studio-theme-dark .shell .image-node img,
+body.studio-theme-dark .shell .output-grid img,
+body.studio-theme-dark .shell .output-preview img {
+    background: var(--v-soft) !important;
+    background-color: var(--v-soft) !important;
+    border-color: var(--v-line) !important;
+}
+
+/* ---------- 4. 画布节点 ---------- */
+html.studio-theme-dark body .shell .node,
+body.studio-theme-dark .shell .node {
+    background: var(--v-card) !important;
+    border-color: var(--v-line) !important;
+    color: var(--v-text) !important;
+    box-shadow: 0 18px 46px rgba(0, 0, 0, .42) !important;
+}
+
+html.studio-theme-dark body .shell .node-head,
+body.studio-theme-dark .shell .node-head {
+    background: var(--v-card-2) !important;
+    border-bottom-color: var(--v-line) !important;
+}
+
+html.studio-theme-dark body .shell .node-title,
+body.studio-theme-dark .shell .node-title {
+    color: var(--v-dim) !important;
+}
+
+html.studio-theme-dark body .shell .node.selected,
+body.studio-theme-dark .shell .node.selected {
+    outline-color: var(--v-accent) !important;
+    box-shadow: 0 0 0 2px var(--v-accent-line), 0 18px 46px rgba(124, 92, 255, .18) !important;
+}
+
+html.studio-theme-dark body .shell .port::after,
+body.studio-theme-dark .shell .port::after {
+    background: var(--v-accent) !important;
+    border-color: var(--v-page) !important;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, .22) !important;
+}
+
+html.studio-theme-dark body .shell .resize-handle,
+body.studio-theme-dark .shell .resize-handle {
+    background: var(--v-card-2) !important;
+    border-color: var(--v-line) !important;
+    color: var(--v-dim) !important;
+}
+
+html.studio-theme-dark body .shell .resize-handle:hover,
+body.studio-theme-dark .shell .resize-handle:hover {
+    background: var(--v-soft-2) !important;
+    border-color: var(--v-accent-line) !important;
+    color: var(--v-text) !important;
+}
+
+/* ---------- 5. 主按钮：紫色实心 + 柔光 ---------- */
+html.studio-theme-dark body .glass-btn,
+html.studio-theme-dark body .btn-action-dark,
+html.studio-theme-dark body .send-btn,
+html.studio-theme-dark body .gen-btn,
+html.studio-theme-dark body .comfy-run,
+html.studio-theme-dark body .llm-run,
+html.studio-theme-dark body .primary-btn,
+html.studio-theme-dark body .btn-render,
+html.studio-theme-dark body #downloadBtn,
+html.studio-theme-dark body #lightboxDownload,
+html.studio-theme-dark body .canvas-confirm-btn,
+html.studio-theme-dark body .create-confirm,
+html.studio-theme-dark body .bg-black,
+body.studio-theme-dark .glass-btn,
+body.studio-theme-dark .btn-action-dark,
+body.studio-theme-dark .send-btn,
+body.studio-theme-dark .gen-btn,
+body.studio-theme-dark .comfy-run,
+body.studio-theme-dark .llm-run,
+body.studio-theme-dark .primary-btn,
+body.studio-theme-dark .btn-render,
+body.studio-theme-dark #downloadBtn,
+body.studio-theme-dark #lightboxDownload,
+body.studio-theme-dark .canvas-confirm-btn,
+body.studio-theme-dark .create-confirm,
+body.studio-theme-dark .bg-black {
+    background: linear-gradient(180deg, var(--v-accent-hi), var(--v-accent)) !important;
+    background-color: var(--v-accent) !important;
+    border-color: var(--v-accent) !important;
+    color: #fff !important;
+    box-shadow: var(--v-glow) !important;
+}
+
+html.studio-theme-dark body .glass-btn:hover,
+html.studio-theme-dark body .btn-action-dark:hover,
+html.studio-theme-dark body .btn-render:hover,
+html.studio-theme-dark body .gen-btn:hover,
+html.studio-theme-dark body .bg-black:hover,
+body.studio-theme-dark .glass-btn:hover,
+body.studio-theme-dark .btn-action-dark:hover,
+body.studio-theme-dark .btn-render:hover,
+body.studio-theme-dark .gen-btn:hover,
+body.studio-theme-dark .bg-black:hover {
+    background: var(--v-accent-lo) !important;
+    background-color: var(--v-accent-lo) !important;
+    border-color: var(--v-accent-hi) !important;
+    color: #fff !important;
+    box-shadow: 0 10px 30px rgba(124, 92, 255, .45) !important;
+}
+
+html.studio-theme-dark body .glass-btn svg,
+html.studio-theme-dark body .btn-render svg,
+html.studio-theme-dark body .gen-btn svg,
+body.studio-theme-dark .glass-btn svg,
+body.studio-theme-dark .btn-render svg,
+body.studio-theme-dark .gen-btn svg {
+    stroke: #fff !important;
+}
+
+/* ---------- 6. 次级按钮 / 胶囊控件 ---------- */
+html.studio-theme-dark body .secondary-btn,
+html.studio-theme-dark body .gate-back,
+html.studio-theme-dark body .gate-trash-entry,
+html.studio-theme-dark body .create-cancel,
+html.studio-theme-dark body .gate-create-row,
+html.studio-theme-dark body .gate-actions,
+html.studio-theme-dark body .trash-note,
+html.studio-theme-dark body .canvas-preview-mark,
+html.studio-theme-dark body .canvas-delete,
+html.studio-theme-dark body .theme-dock-btn,
+html.studio-theme-dark body .cloud-status,
+body.studio-theme-dark .secondary-btn,
+body.studio-theme-dark .gate-back,
+body.studio-theme-dark .gate-trash-entry,
+body.studio-theme-dark .create-cancel,
+body.studio-theme-dark .gate-create-row,
+body.studio-theme-dark .gate-actions,
+body.studio-theme-dark .trash-note,
+body.studio-theme-dark .canvas-preview-mark,
+body.studio-theme-dark .canvas-delete,
+body.studio-theme-dark .theme-dock-btn,
+body.studio-theme-dark .cloud-status {
+    background: var(--v-soft) !important;
+    background-color: var(--v-soft) !important;
+    border-color: var(--v-line-2) !important;
+    color: var(--v-dim) !important;
+}
+
+html.studio-theme-dark body .secondary-btn:hover,
+html.studio-theme-dark body .gate-back:hover,
+html.studio-theme-dark body .theme-dock-btn:hover,
+body.studio-theme-dark .secondary-btn:hover,
+body.studio-theme-dark .gate-back:hover,
+body.studio-theme-dark .theme-dock-btn:hover {
+    background: var(--v-soft-2) !important;
+    border-color: var(--v-accent-line) !important;
+    color: var(--v-text) !important;
+}
+
+/* 分段控件 / 选项：非激活灰、激活紫 */
+html.studio-theme-dark body .mode-btn,
+html.studio-theme-dark body .engine-btn,
+html.studio-theme-dark body .model-option,
+html.studio-theme-dark body .ratio-option,
+html.studio-theme-dark body .resolution-option,
+html.studio-theme-dark body .provider-btn,
+html.studio-theme-dark body .size-btn,
+html.studio-theme-dark body .provider-switch button,
+html.studio-theme-dark body .mini-ratio button,
+html.studio-theme-dark body .mode-switch button,
+body.studio-theme-dark .mode-btn,
+body.studio-theme-dark .engine-btn,
+body.studio-theme-dark .model-option,
+body.studio-theme-dark .ratio-option,
+body.studio-theme-dark .resolution-option,
+body.studio-theme-dark .provider-btn,
+body.studio-theme-dark .size-btn,
+body.studio-theme-dark .provider-switch button,
+body.studio-theme-dark .mini-ratio button,
+body.studio-theme-dark .mode-switch button {
+    background: transparent !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+    color: var(--v-dim) !important;
+    box-shadow: none !important;
+}
+
+html.studio-theme-dark body .mode-btn:hover,
+html.studio-theme-dark body .engine-btn:hover,
+html.studio-theme-dark body .model-option:hover,
+html.studio-theme-dark body .ratio-option:hover,
+html.studio-theme-dark body .resolution-option:hover,
+html.studio-theme-dark body .provider-btn:hover,
+html.studio-theme-dark body .size-btn:hover,
+body.studio-theme-dark .mode-btn:hover,
+body.studio-theme-dark .engine-btn:hover,
+body.studio-theme-dark .model-option:hover,
+body.studio-theme-dark .ratio-option:hover,
+body.studio-theme-dark .resolution-option:hover,
+body.studio-theme-dark .provider-btn:hover,
+body.studio-theme-dark .size-btn:hover {
+    background: var(--v-accent-soft) !important;
+    color: var(--v-text) !important;
+}
+
+html.studio-theme-dark body .mode-btn.active,
+html.studio-theme-dark body .engine-btn.active,
+html.studio-theme-dark body .model-option.active,
+html.studio-theme-dark body .ratio-option.active,
+html.studio-theme-dark body .resolution-option.active,
+html.studio-theme-dark body .provider-btn.active,
+html.studio-theme-dark body .size-btn.active,
+html.studio-theme-dark body .mode-switcher .mode-btn.active,
+html.studio-theme-dark body .engine-switch .engine-btn.active,
+html.studio-theme-dark body .provider-switch button.active,
+html.studio-theme-dark body .secondary-btn.active,
+body.studio-theme-dark .mode-btn.active,
+body.studio-theme-dark .engine-btn.active,
+body.studio-theme-dark .model-option.active,
+body.studio-theme-dark .ratio-option.active,
+body.studio-theme-dark .resolution-option.active,
+body.studio-theme-dark .provider-btn.active,
+body.studio-theme-dark .size-btn.active,
+body.studio-theme-dark .mode-switcher .mode-btn.active,
+body.studio-theme-dark .engine-switch .engine-btn.active,
+body.studio-theme-dark .provider-switch button.active,
+body.studio-theme-dark .secondary-btn.active {
+    background: var(--v-accent) !important;
+    background-color: var(--v-accent) !important;
+    border-color: var(--v-accent) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 14px rgba(124, 92, 255, .38) !important;
+}
+
+/* 分段控件的滑块 */
+html.studio-theme-dark body .mode-glider,
+body.studio-theme-dark .mode-glider {
+    background: var(--v-accent) !important;
+    background-color: var(--v-accent) !important;
+    box-shadow: 0 4px 14px rgba(124, 92, 255, .38) !important;
+}
+
+html.studio-theme-dark body .mode-glider + .mode-btn.active,
+body.studio-theme-dark .mode-glider + .mode-btn.active {
+    color: #fff !important;
+}
+
+/* 分段控件容器 */
+html.studio-theme-dark body .mode-switcher,
+html.studio-theme-dark body .provider-switch,
+html.studio-theme-dark body .engine-switch,
+body.studio-theme-dark .mode-switcher,
+body.studio-theme-dark .provider-switch,
+body.studio-theme-dark .engine-switch {
+    background: var(--v-soft) !important;
+    border-color: var(--v-line) !important;
+}
+
+/* ---------- 7. 导航项：激活态改为紫调 ---------- */
+html.studio-theme-dark body .nav-item,
+body.studio-theme-dark .nav-item {
+    color: var(--v-dim) !important;
+}
+
+html.studio-theme-dark body .nav-item:hover,
+body.studio-theme-dark .nav-item:hover {
+    background: var(--v-card) !important;
+    color: var(--v-text) !important;
+}
+
+html.studio-theme-dark body .nav-item.active,
+body.studio-theme-dark .nav-item.active {
+    background: var(--v-accent-soft) !important;
+    color: var(--v-accent-hi) !important;
+    box-shadow: inset 0 0 0 1px var(--v-accent-line) !important;
+}
+
+html.studio-theme-dark body .nav-item.active svg,
+body.studio-theme-dark .nav-item.active svg {
+    stroke: var(--v-accent-hi) !important;
+}
+
+html.studio-theme-dark body .logo-ring,
+body.studio-theme-dark .logo-ring {
+    border-color: var(--v-accent) !important;
+}
+
+html.studio-theme-dark body #logo-dot,
+body.studio-theme-dark #logo-dot {
+    background: var(--v-accent) !important;
+}
+
+/* ---------- 8. 输入框与表单 ---------- */
+html.studio-theme-dark body input,
+html.studio-theme-dark body textarea,
+html.studio-theme-dark body select,
+html.studio-theme-dark body .setting-input,
+html.studio-theme-dark body .setting-check,
+html.studio-theme-dark body .gen-count-input,
+body.studio-theme-dark input,
+body.studio-theme-dark textarea,
+body.studio-theme-dark select,
+body.studio-theme-dark .setting-input,
+body.studio-theme-dark .setting-check,
+body.studio-theme-dark .gen-count-input {
+    background-color: var(--v-soft) !important;
+    border-color: var(--v-line) !important;
+    color: var(--v-text) !important;
+    box-shadow: none !important;
+}
+
+html.studio-theme-dark body input:focus,
+html.studio-theme-dark body textarea:focus,
+html.studio-theme-dark body select:focus,
+body.studio-theme-dark input:focus,
+body.studio-theme-dark textarea:focus,
+body.studio-theme-dark select:focus {
+    border-color: var(--v-accent-line) !important;
+    box-shadow: 0 0 0 3px var(--v-accent-soft) !important;
+    outline: none !important;
+}
+
+html.studio-theme-dark body ::placeholder,
+body.studio-theme-dark ::placeholder,
+html.studio-theme-dark body input::placeholder,
+html.studio-theme-dark body textarea::placeholder,
+body.studio-theme-dark input::placeholder,
+body.studio-theme-dark textarea::placeholder {
+    color: #8e8ea8 !important;
+    opacity: 1 !important;
+}
+
+html.studio-theme-dark body .console-card textarea,
+html.studio-theme-dark body #prompt,
+html.studio-theme-dark body #promptInput,
+html.studio-theme-dark body #messageInput,
+body.studio-theme-dark .console-card textarea,
+body.studio-theme-dark #prompt,
+body.studio-theme-dark #promptInput,
+body.studio-theme-dark #messageInput {
+    color: var(--v-text) !important;
+    caret-color: var(--v-accent-hi) !important;
+}
+
+/* ---------- 9. 边框 / 文字 工具类映射 ---------- */
+html.studio-theme-dark body .border-gray-100,
+html.studio-theme-dark body .border-gray-200,
+html.studio-theme-dark body .border-gray-200\/50,
+html.studio-theme-dark body .border-gray-300,
+html.studio-theme-dark body .border-slate-100,
+html.studio-theme-dark body .border-slate-200,
+html.studio-theme-dark body .border-black,
+html.studio-theme-dark body .border-white,
+html.studio-theme-dark body .border-\[\#f1f5f9\],
+html.studio-theme-dark body .border-\[\#eef2f7\],
+html.studio-theme-dark body .divider,
+body.studio-theme-dark .border-gray-100,
+body.studio-theme-dark .border-gray-200,
+body.studio-theme-dark .border-gray-200\/50,
+body.studio-theme-dark .border-gray-300,
+body.studio-theme-dark .border-slate-100,
+body.studio-theme-dark .border-slate-200,
+body.studio-theme-dark .border-black,
+body.studio-theme-dark .border-white,
+body.studio-theme-dark .border-\[\#f1f5f9\],
+body.studio-theme-dark .border-\[\#eef2f7\],
+body.studio-theme-dark .divider {
+    border-color: var(--v-line) !important;
+}
+
+html.studio-theme-dark body .text-black,
+html.studio-theme-dark body .text-gray-700,
+html.studio-theme-dark body .text-gray-800,
+html.studio-theme-dark body .text-slate-700,
+html.studio-theme-dark body .setting-title,
+html.studio-theme-dark body .setting-meta,
+html.studio-theme-dark body .label-nano,
+html.studio-theme-dark body h1,
+html.studio-theme-dark body h2,
+html.studio-theme-dark body h3,
+html.studio-theme-dark body label,
+body.studio-theme-dark .text-black,
+body.studio-theme-dark .text-gray-700,
+body.studio-theme-dark .text-gray-800,
+body.studio-theme-dark .text-slate-700,
+body.studio-theme-dark .setting-title,
+body.studio-theme-dark .setting-meta,
+body.studio-theme-dark .label-nano,
+body.studio-theme-dark h1,
+body.studio-theme-dark h2,
+body.studio-theme-dark h3,
+body.studio-theme-dark label {
+    color: var(--v-text) !important;
+}
+
+html.studio-theme-dark body .text-gray-300,
+html.studio-theme-dark body .text-gray-400,
+html.studio-theme-dark body .text-gray-500,
+html.studio-theme-dark body .text-gray-600,
+html.studio-theme-dark body .text-slate-400,
+html.studio-theme-dark body .text-slate-500,
+html.studio-theme-dark body .canvas-card-time,
+html.studio-theme-dark body .gate-subtitle,
+body.studio-theme-dark .text-gray-300,
+body.studio-theme-dark .text-gray-400,
+body.studio-theme-dark .text-gray-500,
+body.studio-theme-dark .text-gray-600,
+body.studio-theme-dark .text-slate-400,
+body.studio-theme-dark .text-slate-500,
+body.studio-theme-dark .canvas-card-time,
+body.studio-theme-dark .gate-subtitle {
+    color: var(--v-dim) !important;
+}
+
+html.studio-theme-dark body .hover\:text-black:hover,
+body.studio-theme-dark .hover\:text-black:hover {
+    color: var(--v-text) !important;
+}
+
+/* ---------- 10. 画布列表 / 入口卡片 ---------- */
+html.studio-theme-dark body .canvas-gate,
+body.studio-theme-dark .canvas-gate {
+    background-color: var(--v-page) !important;
+    background-image: radial-gradient(rgba(148, 148, 190, .13) 1px, transparent 1px) !important;
+}
+
+html.studio-theme-dark body .canvas-item:hover,
+body.studio-theme-dark .canvas-item:hover {
+    background: var(--v-card-2) !important;
+    border-color: var(--v-accent-line) !important;
+}
+
+html.studio-theme-dark body .canvas-item.active,
+body.studio-theme-dark .canvas-item.active {
+    background: var(--v-soft-2) !important;
+    border-color: var(--v-accent) !important;
+    color: var(--v-text) !important;
+    box-shadow: 0 0 0 1px var(--v-accent-line) !important;
+}
+
+html.studio-theme-dark body .canvas-card-title,
+html.studio-theme-dark body .gate-title,
+html.studio-theme-dark body .gate-name-input,
+body.studio-theme-dark .canvas-card-title,
+body.studio-theme-dark .gate-title,
+body.studio-theme-dark .gate-name-input {
+    color: var(--v-text) !important;
+}
+
+html.studio-theme-dark body .gate-trash-badge,
+body.studio-theme-dark .gate-trash-badge {
+    background: var(--v-accent) !important;
+    color: #fff !important;
+    border-color: var(--v-soft) !important;
+}
+
+html.studio-theme-dark body .canvas-delete-box,
+body.studio-theme-dark .canvas-delete-box {
+    background: var(--v-card-2) !important;
+    border-color: var(--v-line) !important;
+}
+
+/* =============================================================
+   11. 全局字号放大（解决小节标题/功能标签过小看不清）
+   -------------------------------------------------------------
+   说明：所有工具类均加 !important 优先级，兼容 Tailwind CDN
+   旧 HTML 缓存，确保用户第一次就能看到明显变大的效果。
+   ============================================================= */
+
+/* 11.1 01./02./03./04. 这类小节标题（h3 + uppercase + tracking）
+        原 9px → 强制 20px，字间距收窄避免散开
+*/
+html.studio-theme-dark body main > section > h3.uppercase.tracking,
+html.studio-theme-dark body main section h3.font-black.uppercase,
+html.studio-theme-dark body h3[class*="uppercase"][class*="tracking"],
+body.studio-theme-dark main > section > h3.uppercase.tracking,
+body.studio-theme-dark main section h3.font-black.uppercase,
+body.studio-theme-dark h3[class*="uppercase"][class*="tracking"] {
+    font-size: 20px !important;
+    letter-spacing: 0.1em !important;
+    line-height: 1.6 !important;
+}
+
+/* 11.2 更宽匹配：h3 中带灰字 400/500 的 uppercase 标题（即小节标题） */
+html.studio-theme-dark body h3.text-gray-400.uppercase,
+html.studio-theme-dark body h3.text-gray-500.uppercase,
+html.studio-theme-dark body h3.font-black,
+body.studio-theme-dark h3.text-gray-400.uppercase,
+body.studio-theme-dark h3.text-gray-500.uppercase,
+body.studio-theme-dark h3.font-black {
+    font-size: 20px !important;
+    letter-spacing: 0.1em !important;
+    line-height: 1.6 !important;
+}
+
+/* 11.3 功能标签类：Engine Source / Dimensions / LoRA Strength
+        Main / Aux A / Aux B / Prompt Execution / Ready Status 等
+        原 9~10px → 强制 16px
+*/
+html.studio-theme-dark body span[class*="uppercase"][class*="tracking"].text-gray-400,
+html.studio-theme-dark body span[class*="uppercase"][class*="tracking"].text-gray-500,
+html.studio-theme-dark body span[class*="uppercase"][class*="tracking"].text-gray-600,
+html.studio-theme-dark body span[class*="uppercase"][class*="tracking"].text-gray-300,
+html.studio-theme-dark body p[class*="uppercase"][class*="tracking-widest"].text-gray-400,
+html.studio-theme-dark body .upload-item span[class*="uppercase"].text-gray-400,
+html.studio-theme-dark body #statusDot span#statusText,
+html.studio-theme-dark body div[id*="loraStrength"] span,
+html.studio-theme-dark body span[id*="statusText"],
+html.studio-theme-dark body .control-panel span[class*="uppercase"],
+html.studio-theme-dark body .engine-panel span[class*="uppercase"],
+body.studio-theme-dark span[class*="uppercase"][class*="tracking"].text-gray-400,
+body.studio-theme-dark span[class*="uppercase"][class*="tracking"].text-gray-500,
+body.studio-theme-dark span[class*="uppercase"][class*="tracking"].text-gray-600,
+body.studio-theme-dark span[class*="uppercase"][class*="tracking"].text-gray-300,
+body.studio-theme-dark p[class*="uppercase"][class*="tracking-widest"].text-gray-400,
+body.studio-theme-dark .upload-item span[class*="uppercase"].text-gray-400,
+body.studio-theme-dark #statusDot span#statusText,
+body.studio-theme-dark div[id*="loraStrength"] span,
+body.studio-theme-dark span[id*="statusText"],
+body.studio-theme-dark .control-panel span[class*="uppercase"],
+body.studio-theme-dark .engine-panel span[class*="uppercase"] {
+    font-size: 16px !important;
+    letter-spacing: 0.05em !important;
+}
+
+/* 11.4 按钮文字 & Archives/Canvas Ready/Processing 状态大字
+        原 10~11px → 强制 15px
+*/
+html.studio-theme-dark body button.glass-btn,
+html.studio-theme-dark body .glass-btn,
+html.studio-theme-dark body [class*="btn-render"],
+html.studio-theme-dark body button.font-black.uppercase.tracking,
+html.studio-theme-dark body h2.font-black.uppercase.tracking,
+html.studio-theme-dark body p.font-black.uppercase.tracking,
+html.studio-theme-dark body .flex span[class*="tracking"][class*="uppercase"],
+body.studio-theme-dark button.glass-btn,
+body.studio-theme-dark .glass-btn,
+body.studio-theme-dark [class*="btn-render"],
+body.studio-theme-dark button.font-black.uppercase.tracking,
+body.studio-theme-dark h2.font-black.uppercase.tracking,
+body.studio-theme-dark p.font-black.uppercase.tracking,
+body.studio-theme-dark .flex span[class*="tracking"][class*="uppercase"] {
+    font-size: 15px !important;
+    letter-spacing: 0.06em !important;
+}
+
+/* 11.5 旋转/俯仰/距离标签 + 滑块文字 + 输入框数值 → 16px */
+html.studio-theme-dark body .flex.justify-between.items-center.uppercase.tracking,
+html.studio-theme-dark body input[type="number"],
+html.studio-theme-dark body span.text-gray-500.uppercase.tracking,
+html.studio-theme-dark body label.uppercase.tracking-wider,
+body.studio-theme-dark .flex.justify-between.items-center.uppercase.tracking,
+body.studio-theme-dark input[type="number"],
+body.studio-theme-dark span.text-gray-500.uppercase.tracking,
+body.studio-theme-dark label.uppercase.tracking-wider {
+    font-size: 16px !important;
+    letter-spacing: 0.03em !important;
+}
+
+/* ---------- 11. 对话气泡 ---------- */
+html.studio-theme-dark body .bubble.assistant,
+html.studio-theme-dark body .shell .llm-bubble.assistant,
+body.studio-theme-dark .bubble.assistant,
+body.studio-theme-dark .shell .llm-bubble.assistant {
+    background: var(--v-card) !important;
+    background-color: var(--v-card) !important;
+    color: var(--v-text) !important;
+    border-color: var(--v-line) !important;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, .34) !important;
+}
+
+html.studio-theme-dark body .bubble.user,
+html.studio-theme-dark body .shell .llm-bubble.user,
+body.studio-theme-dark .bubble.user,
+body.studio-theme-dark .shell .llm-bubble.user {
+    background: linear-gradient(180deg, var(--v-accent-hi), var(--v-accent)) !important;
+    background-color: var(--v-accent) !important;
+    color: #fff !important;
+    border-color: var(--v-accent) !important;
+    box-shadow: 0 10px 26px rgba(124, 92, 255, .30) !important;
+}
+
+html.studio-theme-dark body .bubble.assistant.streaming::after,
+body.studio-theme-dark .bubble.assistant.streaming::after {
+    background: var(--v-accent-hi) !important;
+}
+
+html.studio-theme-dark body .bubble img.generated,
+body.studio-theme-dark .bubble img.generated {
+    border-color: var(--v-line-2) !important;
+}
+
+html.studio-theme-dark body .composer-wrap,
+body.studio-theme-dark .composer-wrap {
+    background: linear-gradient(to top, var(--v-page) 82%, rgba(11, 11, 18, 0)) !important;
+}
+
+html.studio-theme-dark body .composer-body,
+body.studio-theme-dark .composer-body {
+    background: var(--v-soft) !important;
+    border-color: var(--v-line) !important;
+}
+
+/* ---------- 12. 开关 / 滑块 / 滚动条 ---------- */
+html.studio-theme-dark body .ios-slider,
+html.studio-theme-dark body .ios-switch .ios-slider,
+body.studio-theme-dark .ios-slider,
+body.studio-theme-dark .ios-switch .ios-slider {
+    background: var(--v-soft-2) !important;
+    border: 1px solid var(--v-line-2) !important;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, .36) !important;
+}
+
+html.studio-theme-dark body .ios-switch .ios-slider:before,
+body.studio-theme-dark .ios-switch .ios-slider:before {
+    background: var(--v-text) !important;
+}
+
+html.studio-theme-dark body .ios-switch input:checked + .ios-slider,
+body.studio-theme-dark .ios-switch input:checked + .ios-slider {
+    background: var(--v-accent) !important;
+    border-color: var(--v-accent) !important;
+    box-shadow: 0 0 0 3px var(--v-accent-soft) !important;
+}
+
+html.studio-theme-dark body .ios-switch input:checked + .ios-slider:before,
+body.studio-theme-dark .ios-switch input:checked + .ios-slider:before {
+    background: #fff !important;
+}
+
+html.studio-theme-dark body input[type=range]::-webkit-slider-runnable-track,
+body.studio-theme-dark input[type=range]::-webkit-slider-runnable-track {
+    background: var(--v-soft-2) !important;
+}
+
+html.studio-theme-dark body input[type=range]::-webkit-slider-thumb,
+body.studio-theme-dark input[type=range]::-webkit-slider-thumb {
+    background: var(--v-accent) !important;
+    border-color: var(--v-page) !important;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #2e2e42 !important;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background-color: var(--v-accent) !important;
+}
+
+/* ---------- 13. 遮罩 / 灯箱 ---------- */
+html.studio-theme-dark body .gallery-lightbox,
+html.studio-theme-dark body #lightbox,
+body.studio-theme-dark .gallery-lightbox,
+body.studio-theme-dark #lightbox {
+    background: rgba(8, 8, 13, .86) !important;
+    backdrop-filter: blur(18px) saturate(1.05) !important;
+}
+
+/* ---------- 14. 交互反馈 ---------- */
+html.studio-theme-dark body .masonry-item:hover,
+html.studio-theme-dark body .console-card:focus-within,
+html.studio-theme-dark body .select-shell:focus-within,
+body.studio-theme-dark .masonry-item:hover,
+body.studio-theme-dark .console-card:focus-within,
+body.studio-theme-dark .select-shell:focus-within {
+    border-color: var(--v-accent-line) !important;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, .38) !important;
+}
+
+html.studio-theme-dark body .upload-item:hover,
+html.studio-theme-dark body .upload-item.drag-over,
+html.studio-theme-dark body .shell .blank-image:hover,
+html.studio-theme-dark body .shell .blank-image.drag-over,
+body.studio-theme-dark .upload-item:hover,
+body.studio-theme-dark .upload-item.drag-over,
+body.studio-theme-dark .shell .blank-image:hover,
+body.studio-theme-dark .shell .blank-image.drag-over {
+    background: var(--v-card-2) !important;
+    border-color: var(--v-accent-line) !important;
+    color: var(--v-text) !important;
+}
+
+html.studio-theme-dark body .canvas-delete:hover,
+html.studio-theme-dark body .create-cancel:hover,
+body.studio-theme-dark .canvas-delete:hover,
+body.studio-theme-dark .create-cancel:hover {
+    background: rgba(248, 113, 113, .14) !important;
+    border-color: rgba(248, 113, 113, .34) !important;
+    color: #fca5a5 !important;
+}
+
+html.studio-theme-dark body .canvas-restore:hover,
+body.studio-theme-dark .canvas-restore:hover {
+    background: rgba(16, 185, 129, .14) !important;
+    border-color: rgba(16, 185, 129, .34) !important;
+    color: #6ee7b7 !important;
+}
+
+html.studio-theme-dark body .shell .drop-overlay,
+body.studio-theme-dark .shell .drop-overlay {
+    background: rgba(11, 11, 18, .55) !important;
+    color: var(--v-text) !important;
+}
+
+/* 文本选中与焦点圈统一紫调 */
+html.studio-theme-dark ::selection,
+body.studio-theme-dark ::selection {
+    background: var(--v-accent) !important;
+    color: #fff !important;
+}
+
+html.studio-theme-dark body :focus-visible,
+body.studio-theme-dark :focus-visible {
+    outline: 2px solid var(--v-accent-line) !important;
+    outline-offset: 2px !important;
+}
+
+/* ---------- 15. 圆角与质感统一 ---------- */
+html.studio-theme-dark body .console-card,
+html.studio-theme-dark body .upload-item,
+html.studio-theme-dark body .masonry-item,
+html.studio-theme-dark body .setting-row,
+html.studio-theme-dark body .tool-panel,
+html.studio-theme-dark body .control-panel,
+html.studio-theme-dark body .engine-panel,
+html.studio-theme-dark body .gate-panel,
+html.studio-theme-dark body .canvas-item,
+html.studio-theme-dark body .canvas-open,
+body.studio-theme-dark .console-card,
+body.studio-theme-dark .upload-item,
+body.studio-theme-dark .masonry-item,
+body.studio-theme-dark .setting-row,
+body.studio-theme-dark .tool-panel,
+body.studio-theme-dark .control-panel,
+body.studio-theme-dark .engine-panel,
+body.studio-theme-dark .gate-panel,
+body.studio-theme-dark .canvas-item,
+body.studio-theme-dark .canvas-open {
+    border-radius: 14px !important;
+    transition: border-color .18s ease, background-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+html.studio-theme-dark body .glass-btn,
+html.studio-theme-dark body .btn-action-dark,
+html.studio-theme-dark body .send-btn,
+html.studio-theme-dark body .gen-btn,
+html.studio-theme-dark body .comfy-run,
+html.studio-theme-dark body .llm-run,
+html.studio-theme-dark body .primary-btn,
+html.studio-theme-dark body .secondary-btn,
+html.studio-theme-dark body .action-btn,
+html.studio-theme-dark body .tool-btn,
+html.studio-theme-dark body .select-lite,
+body.studio-theme-dark .glass-btn,
+body.studio-theme-dark .btn-action-dark,
+body.studio-theme-dark .send-btn,
+body.studio-theme-dark .gen-btn,
+body.studio-theme-dark .comfy-run,
+body.studio-theme-dark .llm-run,
+body.studio-theme-dark .primary-btn,
+body.studio-theme-dark .secondary-btn,
+body.studio-theme-dark .action-btn,
+body.studio-theme-dark .tool-btn,
+body.studio-theme-dark .select-lite {
+    border-radius: 10px !important;
+    transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease, color .18s ease;
+}
+
+/* =============================================================
+   16. .shell 作用域补丁
+   theme.css 中有一批 `.shell .xxx` 形式的选择器，特异度高于
+   上面的通用规则，这里用同形选择器（同特异度 + 更晚加载）覆盖，
+   否则智能画布外壳内的这些控件会残留蓝灰色。
+   ============================================================= */
+
+html.studio-theme-dark body .shell .gen-settings,
+html.studio-theme-dark body .shell .setting-row,
+html.studio-theme-dark body .shell .comfy-settings,
+body.studio-theme-dark .shell .gen-settings,
+body.studio-theme-dark .shell .setting-row,
+body.studio-theme-dark .shell .comfy-settings {
+    background: var(--v-card) !important;
+    background-color: var(--v-card) !important;
+    border-color: var(--v-line) !important;
+    color: var(--v-text) !important;
+}
+
+html.studio-theme-dark body .shell .tool-btn,
+html.studio-theme-dark body .shell .select-lite,
+html.studio-theme-dark body .shell .gen-count-row,
+html.studio-theme-dark body .shell .seg,
+html.studio-theme-dark body .shell .llm-mode,
+html.studio-theme-dark body .shell .mode-tabs,
+html.studio-theme-dark body .shell .gen-step-btn,
+body.studio-theme-dark .shell .tool-btn,
+body.studio-theme-dark .shell .select-lite,
+body.studio-theme-dark .shell .gen-count-row,
+body.studio-theme-dark .shell .seg,
+body.studio-theme-dark .shell .llm-mode,
+body.studio-theme-dark .shell .mode-tabs,
+body.studio-theme-dark .shell .gen-step-btn {
+    background: var(--v-soft) !important;
+    background-color: var(--v-soft) !important;
+    border-color: var(--v-line) !important;
+    color: var(--v-dim) !important;
+}
+
+html.studio-theme-dark body .shell .tool-btn:hover,
+html.studio-theme-dark body .shell .select-lite:hover,
+html.studio-theme-dark body .shell .gen-step-btn:hover,
+body.studio-theme-dark .shell .tool-btn:hover,
+body.studio-theme-dark .shell .select-lite:hover,
+body.studio-theme-dark .shell .gen-step-btn:hover {
+    background: var(--v-card-2) !important;
+    background-color: var(--v-card-2) !important;
+    border-color: var(--v-accent-line) !important;
+    color: var(--v-text) !important;
+}
+
+html.studio-theme-dark body .shell .setting-input,
+html.studio-theme-dark body .shell .setting-check,
+html.studio-theme-dark body .shell .gen-count-input,
+html.studio-theme-dark body .shell .llm-system,
+html.studio-theme-dark body .shell .llm-chat-input,
+html.studio-theme-dark body .shell .llm-chat-log,
+html.studio-theme-dark body .shell .llm-output,
+html.studio-theme-dark body .shell .llm-chat-pane,
+html.studio-theme-dark body .shell .model-input,
+body.studio-theme-dark .shell .setting-input,
+body.studio-theme-dark .shell .setting-check,
+body.studio-theme-dark .shell .gen-count-input,
+body.studio-theme-dark .shell .llm-system,
+body.studio-theme-dark .shell .llm-chat-input,
+body.studio-theme-dark .shell .llm-chat-log,
+body.studio-theme-dark .shell .llm-output,
+body.studio-theme-dark .shell .llm-chat-pane,
+body.studio-theme-dark .shell .model-input {
+    background: var(--v-soft) !important;
+    background-color: var(--v-soft) !important;
+    border-color: var(--v-line) !important;
+    color: var(--v-text) !important;
+}
+
+html.studio-theme-dark body .shell .setting-title,
+html.studio-theme-dark body .shell .image-caption,
+body.studio-theme-dark .shell .setting-title,
+body.studio-theme-dark .shell .image-caption {
+    color: var(--v-dim) !important;
+}
+
+html.studio-theme-dark body .shell .input-index,
+body.studio-theme-dark .shell .input-index {
+    background: var(--v-accent) !important;
+    color: #fff !important;
+}
+
+html.studio-theme-dark body .shell .input-label,
+body.studio-theme-dark .shell .input-label {
+    background: rgba(11, 11, 18, .82) !important;
+    color: var(--v-text) !important;
+}
+
+html.studio-theme-dark body .shell .prompt-list .bg-slate-50,
+html.studio-theme-dark body .shell .prompt-list .border-slate-100,
+body.studio-theme-dark .shell .prompt-list .bg-slate-50,
+body.studio-theme-dark .shell .prompt-list .border-slate-100 {
+    background: var(--v-soft) !important;
+    background-color: var(--v-soft) !important;
+    border-color: var(--v-line) !important;
+    color: var(--v-text) !important;
+}
+
+html.studio-theme-dark body .shell .llm-mode button,
+html.studio-theme-dark body .shell .seg button,
+html.studio-theme-dark body .shell .mode-tabs button,
+body.studio-theme-dark .shell .llm-mode button,
+body.studio-theme-dark .shell .seg button,
+body.studio-theme-dark .shell .mode-tabs button {
+    background: transparent !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+    color: var(--v-dim) !important;
+}
+
+html.studio-theme-dark body .shell .llm-mode button.active,
+html.studio-theme-dark body .shell .seg button.active,
+html.studio-theme-dark body .shell .mode-tabs button.active,
+body.studio-theme-dark .shell .llm-mode button.active,
+body.studio-theme-dark .shell .seg button.active,
+body.studio-theme-dark .shell .mode-tabs button.active {
+    background: var(--v-accent) !important;
+    background-color: var(--v-accent) !important;
+    border-color: var(--v-accent) !important;
+    color: #fff !important;
+}
+
+html.studio-theme-dark body .shell .llm-pane-resizer::before,
+body.studio-theme-dark .shell .llm-pane-resizer::before {
+    background: var(--v-line-2) !important;
+}
+
+html.studio-theme-dark body .shell .comfy-random-btn.active,
+body.studio-theme-dark .shell .comfy-random-btn.active {
+    background: var(--v-accent) !important;
+    background-color: var(--v-accent) !important;
+    border-color: var(--v-accent) !important;
+    color: #fff !important;
+}
+
+html.studio-theme-dark body .shell .comfy-random-btn.active svg,
+body.studio-theme-dark .shell .comfy-random-btn.active svg {
+    fill: none !important;
+    stroke: #fff !important;
+}
+
+/* =============================================================
+   17. 排版可读性提升（浅色 / 深色都生效）
+   -------------------------------------------------------------
+   原设计大量使用 9~11px 超小字号，并配上 0.3~0.5em 的超大字母
+   间距，导致中文界面几乎无法辨认。这里统一上调字号、收敛字距。
+
+   说明：Tailwind 的 CDN 版会在运行时把样式注入到 <head> 末尾，
+   加载顺序不可控，因此统一用 `html body` 前缀把特异度提到
+   (0,1,2)，稳定压过 Tailwind 的单类规则 (0,1,0)。
+   同时用 [class~="..."] 做精确类名匹配，避免转义符出错。
+   ============================================================= */
+
+/* ---------- 17.1 超小字号整体上调 ---------- */
+html body [class~="text-[9px]"] {
+    line-height: 1.55 !important;
+}
+
+html body [class~="text-[10px]"] {
+    line-height: 1.55 !important;
+}
+
+html body [class~="text-[11px]"] {
+    line-height: 1.55 !important;
+}
+
+html body [class~="text-[12px]"] {
+    font-size: 13px !important;
+}
+
+/* ---------- 17.2 超大字母间距收敛 ---------- */
+html body [class~="tracking-[0.5em]"] {
+    letter-spacing: .26em !important;
+}
+
+html body [class~="tracking-[0.4em]"] {
+    letter-spacing: .22em !important;
+}
+
+html body [class~="tracking-[0.3em]"] {
+    letter-spacing: .18em !important;
+}
+
+/* ---------- 17.3 正文类字号小幅上调 ---------- */
+html body .text-xs {
+    line-height: 1.6 !important;
+}
+
+html body .text-sm {
+    line-height: 1.7 !important;
+}
+
+html body .text-base {
+    font-size: 16px !important;
+}
+
+/* ---------- 17.4 表单控件与标签（在线生图等页面内联样式） ---------- */
+html body .control-label {
+    letter-spacing: .02em !important;
+}
+
+html body .size-select,
+
+html body .size-fit-btn {
+    padding: 0 14px !important;
+}
+
+html body .mode-badge {
+    letter-spacing: .05em !important;
+    padding: 3px 10px !important;
+}
+
+html body .setting-meta,
+
+/* 控件高度微调后，圆角同步放大保持比例 */
+html body .size-select,
+html body .size-custom,
+html body .size-fit-btn {
+    border-radius: 12px !important;
+}
+
+/* ---------- 17.5 空状态 / 弱化文字不再“隐形” ---------- */
+html body #placeholder,
+html body .result-frame .opacity-20 {
+    opacity: .5 !important;
+}
+
+html body #loadMoreTrigger {
+    color: #8b8b9e !important;
+}
+
+/* 浅色主题下的弱文字也保证可读 */
+html body .placeholder-gray-300::placeholder,
+html body .placeholder-gray-400::placeholder {
+    color: #9ca0ad !important;
+    opacity: 1 !important;
+}
+
+/* ---------- 17.6 深色主题下的标签配色调亮 ---------- */
+html.studio-theme-dark body .control-label,
+
+html.studio-theme-dark body .load-more-trigger,
+body.studio-theme-dark .load-more-trigger {
+    color: #9a9ab0 !important;
+}
+
+/* =============================================================
+   18. 氛围紫青皮肤（对齐参考图）
+   -------------------------------------------------------------
+   把参考图的 6 个可复用特征逐条落到本项目的类名上：
+     1. 深紫黑底 + 紫/青双向径向光晕 + 极淡网格（氛围感来源）
+     2. 青色只做「点缀」：小标签、徽章、kicker、加载环
+     3. 紫色做「主色」：主按钮、激活态、标题高光
+     4. 卡片加紫调描边 + 悬浮发光，从暗底上浮起来
+     5. 大容器设为透明，否则光晕会被它们整块盖住
+     6. 字号再上一档，标题更亮更粗
+   全部规则限定深色主题，浅色主题不受影响。
+   ============================================================= */
+
+/* ---------- 18.1 页面氛围：径向光晕 + 极淡网格 ---------- */
+html.studio-theme-dark body,
+body.studio-theme-dark {
+    background-color: var(--v-page) !important;
+    background-image:
+        radial-gradient(720px 520px at 10% 6%, rgba(124, 92, 255, .26), transparent 72%),
+        radial-gradient(560px 420px at 94% 0%, rgba(34, 211, 238, .09), transparent 72%),
+        radial-gradient(820px 600px at 74% 104%, rgba(124, 92, 255, .17), transparent 78%),
+        linear-gradient(rgba(158, 158, 208, .022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(158, 158, 208, .022) 1px, transparent 1px) !important;
+    background-size: 100% 100%, 100% 100%, 100% 100%, 46px 46px, 46px 46px !important;
+    background-attachment: fixed !important;
+    background-repeat: no-repeat, no-repeat, no-repeat, repeat, repeat !important;
+}
+
+/* 大容器透明，光晕才透得上来（它们原本是不透明的 --v-page，会把氛围整块盖掉） */
+html.studio-theme-dark body .app-shell,
+html.studio-theme-dark body .shell,
+html.studio-theme-dark body .stage,
+html.studio-theme-dark body .board,
+body.studio-theme-dark .app-shell,
+body.studio-theme-dark .shell,
+body.studio-theme-dark .stage,
+body.studio-theme-dark .board {
+    background-color: transparent !important;
+}
+
+/* 侧栏半透明，保留与主区的层次关系 */
+html.studio-theme-dark body .sidebar,
+body.studio-theme-dark .sidebar {
+    background-color: rgba(10, 9, 18, .62) !important;
+}
+
+/* 画布列表页的板面同样是实底，会让光晕断在边缘，这里放透明只保留网格 */
+html.studio-theme-dark body .ws-board,
+body.studio-theme-dark .ws-board {
+    background-color: transparent !important;
+}
+
+/* ---------- 18.2 青色点缀 ---------- */
+html.studio-theme-dark body .control-label,
+body.studio-theme-dark .control-label {
+    color: var(--v-cyan) !important;
+}
+
+/* 徽章做成参考图里那种「描边胶囊」 */
+html.studio-theme-dark body .mode-badge,
+body.studio-theme-dark .mode-badge {
+    background: var(--v-cyan-soft) !important;
+    border-color: var(--v-cyan-line) !important;
+    color: var(--v-cyan-hi) !important;
+}
+
+/* kicker 小标题（页面副标题 / 分区标题 / 空状态）改用青色 */
+html.studio-theme-dark body [class~="tracking-[0.4em]"],
+html.studio-theme-dark body [class~="tracking-[0.5em]"],
+body.studio-theme-dark [class~="tracking-[0.4em]"],
+body.studio-theme-dark [class~="tracking-[0.5em]"] {
+    color: var(--v-cyan-hi) !important;
+}
+
+/* 导航激活态：白字 + 青色下划线 */
+html.studio-theme-dark body [class~="border-b-2"],
+body.studio-theme-dark [class~="border-b-2"] {
+    border-bottom-color: var(--v-cyan) !important;
+}
+
+/* 加载环原本继承深灰描边，几乎看不见，改成紫色 */
+html.studio-theme-dark body [class~="border-t-transparent"],
+body.studio-theme-dark [class~="border-t-transparent"] {
+    border-color: var(--v-accent) !important;
+    border-top-color: transparent !important;
+}
+
+/* ---------- 18.3 紫色主色：标题高光 + 主按钮渐变 ---------- */
+html.studio-theme-dark body h1,
+body.studio-theme-dark h1 {
+    color: #f4f1ff !important;
+    background-image: linear-gradient(102deg, #ffffff 24%, #cbb9ff 70%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+html.studio-theme-dark body .glass-btn,
+html.studio-theme-dark body .primary-btn,
+html.studio-theme-dark body .gen-btn,
+body.studio-theme-dark .glass-btn,
+body.studio-theme-dark .primary-btn,
+body.studio-theme-dark .gen-btn {
+    /* 最亮端 #7c4dff 与白字对比 4.82:1（原 #8b5cf6 仅 4.24:1） */
+    color: #fff !important;
+    background-color: #6d3ff0 !important;
+    background-image: linear-gradient(135deg, #7c4dff 0%, #6538ea 52%, #552fd6 100%) !important;
+    box-shadow: 0 10px 30px rgba(114, 72, 245, .36),
+                inset 0 1px 0 rgba(255, 255, 255, .20) !important;
+}
+
+html.studio-theme-dark body .glass-btn:hover,
+html.studio-theme-dark body .primary-btn:hover,
+html.studio-theme-dark body .gen-btn:hover,
+body.studio-theme-dark .glass-btn:hover,
+body.studio-theme-dark .primary-btn:hover,
+body.studio-theme-dark .gen-btn:hover {
+    background-color: #7645f7 !important;
+    background-image: linear-gradient(135deg, #8250ff 0%, #7040f5 52%, #5f38e2 100%) !important;
+    box-shadow: 0 14px 38px rgba(114, 72, 245, .48),
+                inset 0 1px 0 rgba(255, 255, 255, .26) !important;
+}
+
+/* 紫色实心按钮内的文字统一压白：
+   部分页面（如 comfyui-settings 的"运行测试"）会把次级文字的灰色
+   继承进按钮内部，导致紫底上是灰字（对比度仅 3.78:1）。
+   只作用于文字容器，不碰 <i>/<svg> 图标，避免压掉自定义图标色。 */
+html.studio-theme-dark body :is(.glass-btn, .btn-action-dark, .send-btn, .gen-btn, .comfy-run, .llm-run, .primary-btn, .btn-render, .canvas-confirm-btn, .create-confirm, .run-btn) :is(span, div, small, b, strong, em, label, p),
+body.studio-theme-dark :is(.glass-btn, .btn-action-dark, .send-btn, .gen-btn, .comfy-run, .llm-run, .primary-btn, .btn-render, .canvas-confirm-btn, .create-confirm, .run-btn) :is(span, div, small, b, strong, em, label, p) {
+    color: #fff !important;
+}
+
+/* api-settings 自己有一套浅色主按钮（--api-dark-primary:#cbd5e1 + 深字），
+   与紫色主题不一致；而上面"s按钮内文字压白"的规则特异度高于它，
+   会把浅底按钮的字压成白色造成不可读。这里统一改成紫色实心 + 白字。 */
+html.studio-theme-dark body .action-btn.primary-btn,
+html.studio-theme-dark body .action-btn.save-btn,
+html.studio-theme-dark body .api-link-btn,
+html.studio-theme-dark body .recommend-register,
+html.studio-theme-dark body .recommend-fill {
+    background-color: #6d3ff0 !important;
+    background-image: linear-gradient(135deg, #7c4dff 0%, #6538ea 52%, #552fd6 100%) !important;
+    border-color: transparent !important;
+    color: #fff !important;
+}
+
+html.studio-theme-dark body .action-btn.primary-btn svg,
+html.studio-theme-dark body .action-btn.save-btn svg {
+    stroke: #fff !important;
+}
+
+/* 禁用态原本用内联 opacity:.5 把已经很暗的灰字再打对折（约 2.5:1），
+   提到 .8 并配更亮的文字色，既看得出不可用又能读清。 */
+html.studio-theme-dark body .action-btn[disabled],
+body.studio-theme-dark .action-btn[disabled] {
+    opacity: .8 !important;
+    color: #c9cadb !important;
+    border-color: var(--v-line-2) !important;
+}
+
+/* =============================================================
+   19. 侧边栏：底部圆角 + 导航文字/图标放大
+   -------------------------------------------------------------
+   1. 侧栏底部两角补圆角，与整体圆角语言一致；
+   2. 导航图标 20 → 23px、导航文字 14 → 15.5px；
+      底部 pill 图标 16 → 18.5px、文字 12 → 13.5px；
+      折叠箭头 18 → 19px。
+   只调尺寸与圆角，不动布局结构；不限定主题，浅色同样受益。
+   ============================================================= */
+
+html body .sidebar {
+    border-radius: 0 0 20px 20px;
+}
+
+/* 图标放大后重新对齐 48px 行高的视觉中心（14 + 20/2 = 24 → 12.5 + 23/2 = 24） */
+html body .nav-item {
+    padding-left: 12.5px;
+}
+
+html body .nav-item svg {
+    width: 23px !important;
+    height: 23px !important;
+}
+
+html body .nav-text {
+    font-size: 15.5px;
+    font-weight: 650;
+}
+
+html body .nav-fold-icon {
+    width: 19px !important;
+    height: 19px !important;
+}
+
+html body .side-pill svg {
+    width: 18.5px !important;
+    height: 18.5px !important;
+}
+
+html body .side-pill-text {
+    font-size: 13.5px;
+    font-weight: 800;
+}
+
+/* =============================================================
+   20. 白天模式：护眼渐变底 + 近黑文字
+   -------------------------------------------------------------
+   原浅色主题用 #94a3b8 / #9ca3af 这类浅灰做次级文字，
+   在白底上只有 2.5:1，是白天模式下"看不清"的原因。
+   这里把底色换成护眼渐变（浅灰蓝 → 浅青绿 → 浅暖灰），
+   文字统一压到近黑，对比度普遍提到 7:1 以上。
+   只作用于浅色主题，深色皮肤不受影响。
+   ============================================================= */
+
+/* ---------- 20.1 护眼渐变底 ---------- */
+html:not(.studio-theme-dark) body,
+body:not(.studio-theme-dark) {
+    background-color: #eef1f6 !important;
+    background-image:
+        radial-gradient(920px 640px at 6% -4%, rgba(186, 214, 255, .58), transparent 72%),
+        radial-gradient(780px 560px at 94% 4%, rgba(178, 230, 209, .48), transparent 74%),
+        radial-gradient(760px 620px at 62% 106%, rgba(255, 236, 200, .40), transparent 76%),
+        linear-gradient(135deg, #e9eef7 0%, #edf4f0 46%, #f7f3ea 100%) !important;
+    background-attachment: fixed !important;
+    background-repeat: no-repeat !important;
+    color: #111318 !important;
+}
+
+/* 大容器透明，护眼底色才透得上来 */
+html:not(.studio-theme-dark) body .app-shell,
+html:not(.studio-theme-dark) body .shell,
+html:not(.studio-theme-dark) body .stage,
+html:not(.studio-theme-dark) body .board,
+body:not(.studio-theme-dark) .app-shell,
+body:not(.studio-theme-dark) .shell,
+body:not(.studio-theme-dark) .stage,
+body:not(.studio-theme-dark) .board {
+    background-color: transparent !important;
+}
+
+/* 画布列表页的板面原本是不透明的 --page 实底，会把护眼渐变整块盖掉。
+   这里只清掉底色，保留它自己的网格线（background-image）。 */
+html:not(.studio-theme-dark) body .ws-board,
+html:not(.studio-theme-dark) body .canvas-board,
+html:not(.studio-theme-dark) body .ws-content,
+body:not(.studio-theme-dark) .ws-board,
+body:not(.studio-theme-dark) .canvas-board,
+body:not(.studio-theme-dark) .ws-content {
+    background-color: transparent !important;
+}
+
+/* 侧栏改半透明白：既保留与主区的层次，又能透出护眼底色 */
+html:not(.studio-theme-dark) body .sidebar,
+html:not(.studio-theme-dark) body .ws-sidebar,
+body:not(.studio-theme-dark) .sidebar,
+body:not(.studio-theme-dark) .ws-sidebar {
+    background-color: rgba(255, 255, 255, .58) !important;
+    --sidebar-bg: rgba(255, 255, 255, .58);
+    --panel: rgba(255, 255, 255, .58);
+}
+
+/* ---------- 20.2 文字压到近黑 ---------- */
+html:not(.studio-theme-dark) body,
+body:not(.studio-theme-dark) {
+    --text: #111318;
+    --text-main: #111318;
+    --muted: #3f4757;
+    --faint: #5b6472;
+    --chat-muted: #3f4757;
+    --chat-faint: #5b6472;
+    --divider: rgba(17, 19, 24, .12);
+}
+
+/* Tailwind 灰阶工具类（浅底上原本只有 2~3:1） */
+html:not(.studio-theme-dark) body .text-gray-300,
+html:not(.studio-theme-dark) body .text-gray-400,
+html:not(.studio-theme-dark) body .text-gray-500,
+html:not(.studio-theme-dark) body .text-gray-600,
+html:not(.studio-theme-dark) body .text-slate-400,
+html:not(.studio-theme-dark) body .text-slate-500,
+body:not(.studio-theme-dark) .text-gray-300,
+body:not(.studio-theme-dark) .text-gray-400,
+body:not(.studio-theme-dark) .text-gray-500,
+body:not(.studio-theme-dark) .text-gray-600,
+body:not(.studio-theme-dark) .text-slate-400,
+body:not(.studio-theme-dark) .text-slate-500 {
+    color: #3f4757 !important;
+}
+
+html:not(.studio-theme-dark) body .text-gray-700,
+html:not(.studio-theme-dark) body .text-gray-800,
+html:not(.studio-theme-dark) body .text-gray-900,
+html:not(.studio-theme-dark) body .text-slate-700,
+html:not(.studio-theme-dark) body .text-black,
+body:not(.studio-theme-dark) .text-gray-700,
+body:not(.studio-theme-dark) .text-gray-800,
+body:not(.studio-theme-dark) .text-gray-900,
+body:not(.studio-theme-dark) .text-slate-700,
+body:not(.studio-theme-dark) .text-black {
+    color: #111318 !important;
+}
+
+/* 表单标签 / 占位符 */
+html:not(.studio-theme-dark) body .control-label,
+body:not(.studio-theme-dark) .control-label {
+    color: #3a4250 !important;
+}
+
+html:not(.studio-theme-dark) body ::placeholder,
+body:not(.studio-theme-dark) ::placeholder {
+    color: #5b6472 !important;
+    opacity: 1 !important;
+}
+
+/* 分区标题与说明文字 */
+html:not(.studio-theme-dark) body .block-desc,
+html:not(.studio-theme-dark) body .block-title,
+html:not(.studio-theme-dark) body .gate-subtitle,
+body:not(.studio-theme-dark) .block-desc,
+body:not(.studio-theme-dark) .block-title,
+body:not(.studio-theme-dark) .gate-subtitle {
+    color: #232833 !important;
+}
+
+/* 空状态不再用极浅灰 */
+html:not(.studio-theme-dark) body #placeholder,
+html:not(.studio-theme-dark) body .result-frame .opacity-20,
+body:not(.studio-theme-dark) #placeholder,
+body:not(.studio-theme-dark) .result-frame .opacity-20 {
+    opacity: .78 !important;
+}
+
+/* ---------- 20.3 侧栏底部：作者名 + 社交图标（白天模式） ---------- */
+/* 原来图标取 --social-icon（浅灰 #cbd5e1 级），浅底上不足 2:1。
+   这里给每个图标配品牌色加深版 + 渐变底片，悬停时底色变成品牌渐变。 */
+
+/* 作者名：紫 → 青渐变文字，两端对比度都在 5:1 以上 */
+html:not(.studio-theme-dark) body .author-name-lite,
+body:not(.studio-theme-dark) .author-name-lite {
+    font-weight: 800;
+    font-size: 12.5px;
+    color: #4c1d95;
+    background-image: linear-gradient(96deg, #5b21b6 0%, #6d3ff0 46%, #0e7490 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+html:not(.studio-theme-dark) body .social-icon-lite,
+body:not(.studio-theme-dark) .social-icon-lite {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
+    color: #3f4757;
+    background-image: linear-gradient(145deg, #ffffff 0%, #eef2ff 52%, #e0f2f1 100%);
+    border: 1px solid #d8dee8;
+    box-shadow: 0 1px 2px rgba(23, 32, 51, .07);
+    transition: color .2s, transform .2s, border-color .2s, box-shadow .2s, background-image .2s;
+}
+
+html:not(.studio-theme-dark) body .social-icon-lite svg,
+body:not(.studio-theme-dark) .social-icon-lite svg {
+    width: 13px !important;
+    height: 13px !important;
+}
+
+/* 品牌色加深版：都在浅底上达到 4.5:1 以上 */
+html:not(.studio-theme-dark) body .social-icon-lite:nth-child(1),
+body:not(.studio-theme-dark) .social-icon-lite:nth-child(1) { color: #0b7fb0; }   /* Bilibili */
+
+html:not(.studio-theme-dark) body .social-icon-lite:nth-child(2),
+body:not(.studio-theme-dark) .social-icon-lite:nth-child(2) { color: #c81e3a; }   /* 小红书 */
+
+html:not(.studio-theme-dark) body .social-icon-lite:nth-child(3),
+body:not(.studio-theme-dark) .social-icon-lite:nth-child(3) { color: #b91717; }   /* YouTube */
+
+html:not(.studio-theme-dark) body .social-icon-lite:nth-child(4),
+body:not(.studio-theme-dark) .social-icon-lite:nth-child(4) { color: #111318; }   /* X */
+
+/* 悬停：底片换成品牌渐变，图标转白 */
+html:not(.studio-theme-dark) body .social-icon-lite:hover,
+body:not(.studio-theme-dark) .social-icon-lite:hover {
+    color: #fff !important;
+    border-color: transparent !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(23, 32, 51, .18);
+}
+
+html:not(.studio-theme-dark) body .social-icon-lite:nth-child(1):hover,
+body:not(.studio-theme-dark) .social-icon-lite:nth-child(1):hover { background-image: linear-gradient(135deg, #12a3d6 0%, #0a6e97 100%); }
+
+html:not(.studio-theme-dark) body .social-icon-lite:nth-child(2):hover,
+body:not(.studio-theme-dark) .social-icon-lite:nth-child(2):hover { background-image: linear-gradient(135deg, #f0344f 0%, #b21530 100%); }
+
+html:not(.studio-theme-dark) body .social-icon-lite:nth-child(3):hover,
+body:not(.studio-theme-dark) .social-icon-lite:nth-child(3):hover { background-image: linear-gradient(135deg, #e32a2a 0%, #9c1010 100%); }
+
+html:not(.studio-theme-dark) body .social-icon-lite:nth-child(4):hover,
+body:not(.studio-theme-dark) .social-icon-lite:nth-child(4):hover { background-image: linear-gradient(135deg, #3a4048 0%, #0b0d11 100%); }
+
+/* 版本号徽章同步压深 */
+html:not(.studio-theme-dark) body .project-version-badge,
+body:not(.studio-theme-dark) .project-version-badge {
+    color: #3f4757 !important;
+    border-color: #d8dee8 !important;
+}
+
+/* ---------- 20.4 侧栏激活态：实心黑 → 紫色渐变 ---------- */
+/* 浅色主题下 --accent 是近黑，激活项是一块纯黑。改成紫渐变后
+   与深色皮肤、与上面的图标同色系，白字对比度 5.8:1。 */
+html:not(.studio-theme-dark) body .nav-item.active,
+html:not(.studio-theme-dark) body .side-pill.active,
+body:not(.studio-theme-dark) .nav-item.active,
+body:not(.studio-theme-dark) .side-pill.active {
+    background-color: #6d3ff0 !important;
+    background-image: linear-gradient(135deg, #7c4dff 0%, #6538ea 52%, #552fd6 100%) !important;
+    color: #fff !important;
+    border-color: transparent !important;
+    box-shadow: 0 6px 18px rgba(114, 72, 245, .30) !important;
+}
+
+html:not(.studio-theme-dark) body .nav-item.active svg,
+html:not(.studio-theme-dark) body .side-pill.active svg,
+body:not(.studio-theme-dark) .nav-item.active svg,
+body:not(.studio-theme-dark) .side-pill.active svg {
+    stroke: #fff !important;
+}
+
+html:not(.studio-theme-dark) body .nav-item.active .nav-text,
+html:not(.studio-theme-dark) body .side-pill.active .side-pill-text,
+body:not(.studio-theme-dark) .nav-item.active .nav-text,
+body:not(.studio-theme-dark) .side-pill.active .side-pill-text {
+    color: #fff !important;
+}
+
+/* =============================================================
+   21. 深色模式侧栏底部：渐变图标 + 让包裹框看得见
+   -------------------------------------------------------------
+   1. 社交图标原来取 --social-icon（#8f8fa8），暗底上偏灰；
+      改为品牌色高亮版 + 渐变底片，悬停换成品牌渐变；
+   2. 版本号徽章 / 作者名的包裹框描边过淡，几乎看不出边框。
+   ============================================================= */
+
+/* ---------- 21.1 作者名：紫 → 青渐变文字 ---------- */
+html.studio-theme-dark body .author-name-lite,
+body.studio-theme-dark .author-name-lite {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: #c4b5fd;
+    background-image: linear-gradient(96deg, #c4b5fd 0%, #a78bfa 46%, #67e8f9 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ---------- 21.2 社交图标：品牌高亮色 + 渐变底片 ---------- */
+html.studio-theme-dark body .social-icon-lite,
+body.studio-theme-dark .social-icon-lite {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
+    color: var(--v-dim);
+    background-image: linear-gradient(145deg, rgba(255, 255, 255, .10) 0%, rgba(255, 255, 255, .03) 100%);
+    border: 1px solid rgba(255, 255, 255, .14);
+    transition: color .2s, transform .2s, border-color .2s, box-shadow .2s, background-image .2s;
+}
+
+html.studio-theme-dark body .social-icon-lite svg,
+body.studio-theme-dark .social-icon-lite svg {
+    width: 13px !important;
+    height: 13px !important;
+}
+
+/* 品牌高亮版：暗底上都在 7:1 以上 */
+html.studio-theme-dark body .social-icon-lite:nth-child(1),
+body.studio-theme-dark .social-icon-lite:nth-child(1) { color: #3fd0f0; }   /* Bilibili */
+
+html.studio-theme-dark body .social-icon-lite:nth-child(2),
+body.studio-theme-dark .social-icon-lite:nth-child(2) { color: #ff6b82; }   /* 小红书 */
+
+html.studio-theme-dark body .social-icon-lite:nth-child(3),
+body.studio-theme-dark .social-icon-lite:nth-child(3) { color: #ff5c5c; }   /* YouTube */
+
+html.studio-theme-dark body .social-icon-lite:nth-child(4),
+body.studio-theme-dark .social-icon-lite:nth-child(4) { color: #ffffff; }   /* X */
+
+/* 悬停：品牌渐变底 + 白图标 */
+html.studio-theme-dark body .social-icon-lite:hover,
+body.studio-theme-dark .social-icon-lite:hover {
+    color: #fff !important;
+    border-color: transparent !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .45);
+}
+
+html.studio-theme-dark body .social-icon-lite:nth-child(1):hover,
+body.studio-theme-dark .social-icon-lite:nth-child(1):hover { background-image: linear-gradient(135deg, #22c1e8 0%, #0a6e97 100%); }
+
+html.studio-theme-dark body .social-icon-lite:nth-child(2):hover,
+body.studio-theme-dark .social-icon-lite:nth-child(2):hover { background-image: linear-gradient(135deg, #ff4d6d 0%, #b21530 100%); }
+
+html.studio-theme-dark body .social-icon-lite:nth-child(3):hover,
+body.studio-theme-dark .social-icon-lite:nth-child(3):hover { background-image: linear-gradient(135deg, #ff4d4d 0%, #9c1010 100%); }
+
+html.studio-theme-dark body .social-icon-lite:nth-child(4):hover,
+body.studio-theme-dark .social-icon-lite:nth-child(4):hover { background-image: linear-gradient(135deg, #5a6070 0%, #22242c 100%); }
+
+/* ---------- 21.3 文字包裹框：描边与底色拉开可见度 ---------- */
+html.studio-theme-dark body .project-version-badge,
+body.studio-theme-dark .project-version-badge {
+    color: var(--v-dim) !important;
+    background-color: rgba(255, 255, 255, .07) !important;
+    border-color: rgba(255, 255, 255, .18) !important;
+}
+
+html.studio-theme-dark body .author-box,
+body.studio-theme-dark .author-box {
+    background-color: rgba(255, 255, 255, .05) !important;
+    border-color: rgba(255, 255, 255, .16) !important;
+}
+
+/* =============================================================
+   22. 玻璃质感轮廓：未选中控件也要看得见
+   -------------------------------------------------------------
+   问题：胶囊按钮 / 输入框 / 徽章在"未选中"状态下描边过淡
+   （浅色主题下几乎与背景同色），只剩文字浮在底上。
+   做法：统一给这类"包裹框"控件加
+     · 半透明玻璃底色（backdrop-filter 模糊背景）
+     · 轮廓分明的 1px 实描边
+     · 顶部内高光 + 轻投影，形成玻璃厚度感
+   明暗两套色值分别适配，边界对比度都保持在可见区间。
+   ============================================================= */
+
+/* ---------- 22.1 浅色：白色玻璃 + 深描边 ---------- */
+html:not(.studio-theme-dark) body :is(.nav-fold-toggle, .side-pill, .nav-item, .action-btn, .tool-btn, .select-lite, .ghost-btn, .mini-btn, .ws-icon-btn, .ws-side-add, .ws-mini-btn, .ws-trash-entry, .project-version-badge, .setting-check, .comfy-random-btn, .gen-step-btn),
+body:not(.studio-theme-dark) :is(.nav-fold-toggle, .side-pill, .nav-item, .action-btn, .tool-btn, .select-lite, .ghost-btn, .mini-btn, .ws-icon-btn, .ws-side-add, .ws-mini-btn, .ws-trash-entry, .project-version-badge, .setting-check, .comfy-random-btn, .gen-step-btn),
+html:not(.studio-theme-dark) body :is(.setting-input, .gen-count-input, .model-input, .llm-system, .llm-chat-input, .llm-output, .size-select, .size-custom, .size-fit-btn, .nano-input),
+body:not(.studio-theme-dark) :is(.setting-input, .gen-count-input, .model-input, .llm-system, .llm-chat-input, .llm-output, .size-select, .size-custom, .size-fit-btn, .nano-input) {
+    background-color: rgba(255, 255, 255, .94) !important;
+    background-image: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, .86) 100%) !important;
+    border-color: rgba(23, 32, 51, .20) !important;
+    box-shadow: inset 0 0 0 1px rgba(23, 32, 51, .20),
+                inset 0 1px 0 rgba(255, 255, 255, .98),
+                0 1px 2px rgba(23, 32, 51, .06) !important;
+    /* 浅色下不用 backdrop-filter：它会把护眼渐变糊成脏绿色 */
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+
+html:not(.studio-theme-dark) body :is(.nav-fold-toggle, .side-pill, .nav-item, .action-btn, .tool-btn, .select-lite, .ghost-btn, .mini-btn, .ws-icon-btn, .ws-side-add, .ws-mini-btn, .project-version-badge):hover,
+body:not(.studio-theme-dark) :is(.nav-fold-toggle, .side-pill, .nav-item, .action-btn, .tool-btn, .select-lite, .ghost-btn, .mini-btn, .ws-icon-btn, .ws-side-add, .ws-mini-btn, .project-version-badge):hover {
+    border-color: rgba(23, 32, 51, .38) !important;
+    background-image: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, .78) 100%) !important;
+    box-shadow: inset 0 0 0 1px rgba(23, 32, 51, .38),
+                inset 0 1px 0 rgba(255, 255, 255, .95),
+                0 2px 6px rgba(23, 32, 51, .10) !important;
+}
+
+/* ---------- 22.2 深色：暗玻璃 + 亮描边 ---------- */
+html.studio-theme-dark body :is(.nav-fold-toggle, .side-pill, .nav-item, .action-btn, .tool-btn, .select-lite, .ghost-btn, .mini-btn, .ws-icon-btn, .ws-side-add, .ws-mini-btn, .ws-trash-entry, .project-version-badge, .setting-check, .comfy-random-btn, .gen-step-btn),
+body.studio-theme-dark :is(.nav-fold-toggle, .side-pill, .nav-item, .action-btn, .tool-btn, .select-lite, .ghost-btn, .mini-btn, .ws-icon-btn, .ws-side-add, .ws-mini-btn, .ws-trash-entry, .project-version-badge, .setting-check, .comfy-random-btn, .gen-step-btn),
+html.studio-theme-dark body :is(.setting-input, .gen-count-input, .model-input, .llm-system, .llm-chat-input, .llm-output, .size-select, .size-custom, .size-fit-btn, .nano-input),
+body.studio-theme-dark :is(.setting-input, .gen-count-input, .model-input, .llm-system, .llm-chat-input, .llm-output, .size-select, .size-custom, .size-fit-btn, .nano-input) {
+    background-color: rgba(255, 255, 255, .065) !important;
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, .10) 0%, rgba(255, 255, 255, .035) 100%) !important;
+    border-color: rgba(255, 255, 255, .22) !important;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .22),
+                inset 0 1px 0 rgba(255, 255, 255, .12),
+                0 2px 8px rgba(0, 0, 0, .35) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(1.08);
+    backdrop-filter: blur(10px) saturate(1.08);
+}
+
+html.studio-theme-dark body :is(.nav-fold-toggle, .side-pill, .nav-item, .action-btn, .tool-btn, .select-lite, .ghost-btn, .mini-btn, .ws-icon-btn, .ws-side-add, .ws-mini-btn, .project-version-badge):hover,
+body.studio-theme-dark :is(.nav-fold-toggle, .side-pill, .nav-item, .action-btn, .tool-btn, .select-lite, .ghost-btn, .mini-btn, .ws-icon-btn, .ws-side-add, .ws-mini-btn, .project-version-badge):hover {
+    border-color: rgba(255, 255, 255, .38) !important;
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, .17) 0%, rgba(255, 255, 255, .07) 100%) !important;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .38),
+                inset 0 1px 0 rgba(255, 255, 255, .16),
+                0 4px 12px rgba(0, 0, 0, .40) !important;
+}
+
+/* =============================================================
+   23. 页面顶部文字放大
+   -------------------------------------------------------------
+   1. 页面右上角的导航标签（Create / Enhance / Angle）
+      只有 angle / enhance / online 三页有，原来继承 11px 级；
+   2. 各页标题下方的 kicker 副标题（tracking 0.4~0.5em 那行）。
+   ============================================================= */
+
+/* 顶部导航标签：16px + 更重的字重，下划线留出呼吸空间 */
+html body nav[class*="tracking-widest"] {
+    font-size: 16px !important;
+    gap: 2.5rem !important;
+}
+
+html body nav[class*="tracking-widest"] > span {
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    letter-spacing: .06em !important;
+    padding-bottom: 7px !important;
+}
+
+/* 标题下方那行 kicker 副标题：13.5 → 14.5px，字距略收避免拖长 */
+html body [class~="tracking-[0.4em]"],
+html body [class~="tracking-[0.5em]"] {
+    font-size: 14.5px !important;
+    letter-spacing: .2em !important;
+    line-height: 1.7 !important;
+}
+
+/* =============================================================
+   24. 工具栏按钮体系：分段式玻璃控件 + 主按钮统一紫色
+   -------------------------------------------------------------
+   · 一排同类按钮（.ws-topbar-right）改成一体的分段控件：
+     共用一层玻璃底，按钮之间用 1px 细分隔线切分；
+   · 分段内的次级按钮透明化，"每颗各自套壳"变成"一条工具栏"；
+   · 主按钮原来是白块，统一成全站的紫色渐变。
+   ============================================================= */
+
+/* ---------- 24.1 主按钮：统一紫色渐变 ---------- */
+html body .ws-primary-btn {
+    background-color: #6d3ff0 !important;
+    background-image: linear-gradient(135deg, #7c4dff 0%, #6538ea 52%, #552fd6 100%) !important;
+    color: #fff !important;
+    border: none !important;
+    box-shadow: 0 6px 16px rgba(114, 72, 245, .28),
+                inset 0 1px 0 rgba(255, 255, 255, .22) !important;
+}
+
+html body .ws-primary-btn:hover {
+    background-color: #7645f7 !important;
+    background-image: linear-gradient(135deg, #8250ff 0%, #7040f5 52%, #5f38e2 100%) !important;
+    box-shadow: 0 10px 24px rgba(114, 72, 245, .40),
+                inset 0 1px 0 rgba(255, 255, 255, .28) !important;
+}
+
+html body .ws-primary-btn svg {
+    stroke: #fff !important;
+}
+
+/* ---------- 24.2 分段式控件容器：浅色 ---------- */
+html:not(.studio-theme-dark) body .ws-topbar-right,
+body:not(.studio-theme-dark) .ws-topbar-right {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0 !important;
+    padding: 3px !important;
+    border-radius: 14px !important;
+    background-color: rgba(255, 255, 255, .66) !important;
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, .92) 0%, rgba(255, 255, 255, .54) 100%) !important;
+    border: 1px solid rgba(23, 32, 51, .16) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .96),
+                0 3px 14px rgba(23, 32, 51, .08) !important;
+}
+
+/* 段内按钮：去掉各自的壳，只做"格子" */
+html:not(.studio-theme-dark) body .ws-topbar-right > button,
+body:not(.studio-theme-dark) .ws-topbar-right > button {
+    height: 32px !important;
+    border-radius: 10px !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: #3f4757 !important;
+    font-weight: 800 !important;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+
+/* 分割线：相邻按钮左侧 1px 细线，用内阴影画，不占布局 */
+html:not(.studio-theme-dark) body .ws-topbar-right > button + button,
+body:not(.studio-theme-dark) .ws-topbar-right > button + button {
+    box-shadow: inset 1px 0 0 rgba(23, 32, 51, .14) !important;
+}
+
+html:not(.studio-theme-dark) body .ws-topbar-right > .ws-icon-btn:hover,
+html:not(.studio-theme-dark) body .ws-topbar-right > .ws-paste-btn:hover,
+body:not(.studio-theme-dark) .ws-topbar-right > .ws-icon-btn:hover,
+body:not(.studio-theme-dark) .ws-topbar-right > .ws-paste-btn:hover {
+    background-color: rgba(23, 32, 51, .08) !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    color: #111318 !important;
+    transform: none !important;
+}
+
+/* 主按钮在分段里保持紫色实心（特异度高于上面的透明化规则） */
+html:not(.studio-theme-dark) body .ws-topbar-right > .ws-primary-btn,
+body:not(.studio-theme-dark) .ws-topbar-right > .ws-primary-btn {
+    color: #fff !important;
+    background-color: #6d3ff0 !important;
+    background-image: linear-gradient(135deg, #7c4dff 0%, #6538ea 52%, #552fd6 100%) !important;
+    box-shadow: 0 4px 12px rgba(114, 72, 245, .30),
+                inset 0 1px 0 rgba(255, 255, 255, .22) !important;
+}
+
+/* ---------- 24.3 分段式控件容器：深色 ---------- */
+html.studio-theme-dark body .ws-topbar-right,
+body.studio-theme-dark .ws-topbar-right {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0 !important;
+    padding: 3px !important;
+    border-radius: 14px !important;
+    background-color: rgba(255, 255, 255, .055) !important;
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, .10) 0%, rgba(255, 255, 255, .03) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, .16) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .10),
+                0 4px 16px rgba(0, 0, 0, .38) !important;
+}
+
+html.studio-theme-dark body .ws-topbar-right > button,
+body.studio-theme-dark .ws-topbar-right > button {
+    height: 32px !important;
+    border-radius: 10px !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--v-dim) !important;
+    font-weight: 800 !important;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+
+html.studio-theme-dark body .ws-topbar-right > button + button,
+body.studio-theme-dark .ws-topbar-right > button + button {
+    box-shadow: inset 1px 0 0 rgba(255, 255, 255, .12) !important;
+}
+
+html.studio-theme-dark body .ws-topbar-right > .ws-icon-btn:hover,
+html.studio-theme-dark body .ws-topbar-right > .ws-paste-btn:hover,
+body.studio-theme-dark .ws-topbar-right > .ws-icon-btn:hover,
+body.studio-theme-dark .ws-topbar-right > .ws-paste-btn:hover {
+    background-color: rgba(255, 255, 255, .10) !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    color: #fff !important;
+    transform: none !important;
+}
+
+html.studio-theme-dark body .ws-topbar-right > .ws-primary-btn,
+body.studio-theme-dark .ws-topbar-right > .ws-primary-btn {
+    color: #fff !important;
+    background-color: #6d3ff0 !important;
+    background-image: linear-gradient(135deg, #7c4dff 0%, #6538ea 52%, #552fd6 100%) !important;
+    box-shadow: 0 4px 12px rgba(114, 72, 245, .34),
+                inset 0 1px 0 rgba(255, 255, 255, .22) !important;
+}
+
+/* =============================================================
+   25. 侧栏导航整体上移
+   -------------------------------------------------------------
+   原来是三层间距叠加：侧栏 padding-top 40px + logo 的 mb-12(48px)
+   + 每个导航项 margin 10px。这里逐层收窄，让导航组上移一档，
+   同时保持呼吸感不显拥挤。
+   ============================================================= */
+
+/* 侧栏上下留白 40 → 30px */
+html body .sidebar {
+    padding-top: 30px;
+    padding-bottom: 26px;
+}
+
+/* logo 与导航之间 48 → 24px */
+
+/* 导航项间距 10 → 7px（首尾各收 3px，项目越多上移越明显） */
+html body .nav-item {
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+
+/* 折叠按钮与分组之间的间距同步收紧 */
+html body .nav-fold-toggle {
+    margin-bottom: 4px;
+}
+
+html body .nav-fold-group {
+    gap: 0;
+}
+
+/* =============================================================
+   26. 素材库「偏好设置」弹窗：文字与图标放大
+   -------------------------------------------------------------
+   原尺寸偏小（标题 18、副标题 12、输入框 11~12px、控件高 30~36px），
+   这里整体上调约 15~20%，同时把控件高度和图标一起放大，
+   保持"字大了但比例不散"。
+   ============================================================= */
+
+/* 通用兜底：弹窗内所有按钮的字号与图标不小于 13.5px / 16px */
+html body .storage-settings-modal button {
+    font-size: 13.5px !important;
+}
+
+html body .storage-settings-modal button svg {
+    width: 16px !important;
+    height: 16px !important;
+}
+
+/* 头部：标题 18 → 21px，副标题 12 → 14px，关闭键加大 */
+html body .storage-settings-modal .storage-settings-head strong {
+    font-size: 21px !important;
+}
+
+html body .storage-settings-modal .storage-settings-head span {
+    font-size: 14px !important;
+    margin-top: 6px !important;
+    color: var(--v-dim) !important;
+}
+
+html body .storage-settings-modal .storage-settings-head button {
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 11px !important;
+}
+
+html body .storage-settings-modal .storage-settings-head button svg {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+/* 页签（偏好设置 / 素材管理）：高 34 → 40px，字 12 → 14px */
+html body .storage-settings-modal .asset-pref-tabs button {
+    height: 40px !important;
+    padding: 0 15px !important;
+    border-radius: 10px !important;
+    font-size: 14px !important;
+    gap: 8px !important;
+}
+
+html body .storage-settings-modal .asset-pref-tabs button svg {
+    width: 17px !important;
+    height: 17px !important;
+}
+
+/* 分区留白随字号一起放大 */
+html body .storage-settings-modal .asset-pref-section {
+    padding: 17px 20px !important;
+}
+
+/* 分区标题 / 折叠头 */
+html body .storage-settings-modal .asset-pref-title {
+    font-size: 14.5px !important;
+    gap: 8px !important;
+}
+
+html body .storage-settings-modal .asset-pref-title svg {
+    width: 17px !important;
+    height: 17px !important;
+}
+
+html body .storage-settings-modal .asset-pref-fold > span {
+    font-size: 14px !important;
+}
+
+html body .storage-settings-modal .asset-pref-fold > em {
+    font-size: 13px !important;
+}
+
+/* 目录字段：标签 11 → 13px，输入框 36 → 42px / 字 13.5px */
+html body .storage-settings-modal .storage-dir-row span {
+    font-size: 13px !important;
+    font-weight: 900 !important;
+}
+
+html body .storage-settings-modal .storage-dir-row input,
+html body .storage-settings-modal .storage-dir-row select {
+    height: 42px !important;
+    font-size: 13.5px !important;
+    border-radius: 11px !important;
+}
+
+html body .storage-settings-modal .storage-dir-row textarea,
+html body .storage-settings-modal .asset-pref-rule-textarea {
+    font-size: 13px !important;
+    border-radius: 11px !important;
+}
+
+/* 底部筛选胶囊：高 30 → 36px，字 12 → 13.5px */
+html body .storage-settings-modal .storage-tabs button {
+    height: 36px !important;
+    padding: 0 14px !important;
+    border-radius: 10px !important;
+    font-size: 13.5px !important;
+}
+
+/* 文件卡片文字 */
+html body .storage-settings-modal .storage-file-card span {
+    font-size: 13px !important;
+}
+
+html body .storage-settings-modal .storage-file-card em {
+    font-size: 12px !important;
+}
+
+/* 空状态与加载更多 */
+html body .storage-settings-modal .storage-empty {
+    font-size: 15px !important;
+}
+
+html body .storage-settings-modal .storage-load-more {
+    font-size: 13px !important;
+}
+
+/* 底部操作区按钮 */
+html body .storage-settings-modal .storage-settings-actions button {
+    height: 38px !important;
+    padding: 0 18px !important;
+    border-radius: 11px !important;
+    font-size: 13.5px !important;
+}
+
+/* =============================================================
+   27. 全项目「图标 + 文字」小按钮统一放大
+   -------------------------------------------------------------
+   各页面这类按钮原来普遍是 11~12px 字 + 14~16px 图标 + 30~36px
+   高，散落在 10 多个页面里各写一套。这里统一成一档：
+     字号 14px / 图标 17px / 最小高度 38px / 圆角 11px
+   用 min-height 而不是 height，所以只会把小的高上去，
+   不会压掉原本就更高的控件。
+   已经单独调过的（.side-pill / .nav-item / .nav-fold-toggle）
+   不在这里重复，避免互相覆盖。
+   ============================================================= */
+
+/* 27.1 带文字的小按钮 */
+html body :is(.smart-workflow-toggle, .smart-shortcut-toggle, .smart-log-toggle, .asset-toggle, .tool-btn, .action-btn, .ghost-btn, .select-lite, .gen-step-btn, .comfy-random-btn, .api-link-btn, .asset-btn, .asset-tab, .workflow-transfer-btn, .clip-btn, .key-btn, .jimeng-btn, .model-pick-btn) {
+    font-size: 14px !important;
+    min-height: 38px !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+    gap: 8px !important;
+    border-radius: 11px !important;
+}
+
+/* 27.2 纯图标小按钮：做成 38×38 的方形，避免被上面的内边距撑宽 */
+html body :is(.asset-mini-btn, .mini-btn, .ws-icon-btn, .ws-side-add, .ws-mini-btn, .icon-btn) {
+    min-width: 38px !important;
+    min-height: 38px !important;
+    padding: 0 !important;
+    border-radius: 11px !important;
+}
+
+/* 27.3 图标统一尺寸（lucide 初始化后是 svg，未初始化时是 i） */
+html body :is(.smart-workflow-toggle, .smart-shortcut-toggle, .smart-log-toggle, .asset-toggle, .tool-btn, .action-btn, .ghost-btn, .select-lite, .gen-step-btn, .comfy-random-btn, .api-link-btn, .asset-btn, .asset-tab, .workflow-transfer-btn, .clip-btn, .key-btn, .jimeng-btn, .model-pick-btn) svg,
+html body :is(.smart-workflow-toggle, .smart-shortcut-toggle, .smart-log-toggle, .asset-toggle, .tool-btn, .action-btn, .ghost-btn, .select-lite, .gen-step-btn, .comfy-random-btn, .api-link-btn, .asset-btn, .asset-tab, .workflow-transfer-btn, .clip-btn, .key-btn, .jimeng-btn, .model-pick-btn) i {
+    width: 17px !important;
+    height: 17px !important;
+    flex: 0 0 auto;
+}
+
+html body :is(.asset-mini-btn, .mini-btn, .ws-icon-btn, .ws-side-add, .ws-mini-btn, .icon-btn) svg,
+html body :is(.asset-mini-btn, .mini-btn, .ws-icon-btn, .ws-side-add, .ws-mini-btn, .icon-btn) i {
+    width: 18px !important;
+    height: 18px !important;
+    flex: 0 0 auto;
+}
+
+/* =============================================================
+   28. 主工作区：顶部圆角 + 玻璃色调
+   -------------------------------------------------------------
+   原来 .ws-main 是整块不透明底、四个直角，贴在视口顶部，
+   和左侧栏之间是一条硬接缝。改成：
+     · 上方两角 18px 圆角（.ws-main 本身 overflow:hidden，会裁切子元素）；
+     · 底色改半透明玻璃，让护眼渐变透进来；
+     · 顶部内高光 + 上投影，让主区"浮"起来。
+   ============================================================= */
+
+html body .ws-main {
+    border-radius: 18px 18px 0 0;
+    overflow: hidden;
+}
+
+/* 浅色：白玻璃 */
+html:not(.studio-theme-dark) body .ws-main,
+body:not(.studio-theme-dark) .ws-main {
+    background-color: rgba(255, 255, 255, .46) !important;
+    border: 1px solid rgba(23, 32, 51, .10) !important;
+    border-bottom: none !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .90),
+                0 -1px 18px rgba(23, 32, 51, .06) !important;
+}
+
+html:not(.studio-theme-dark) body .ws-topbar,
+body:not(.studio-theme-dark) .ws-topbar {
+    background-color: rgba(255, 255, 255, .58) !important;
+    border-bottom-color: rgba(23, 32, 51, .12) !important;
+}
+
+/* 深色：暗玻璃 */
+html.studio-theme-dark body .ws-main,
+body.studio-theme-dark .ws-main {
+    background-color: rgba(255, 255, 255, .035) !important;
+    border: 1px solid rgba(255, 255, 255, .12) !important;
+    border-bottom: none !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .10),
+                0 -1px 20px rgba(0, 0, 0, .35) !important;
+}
+
+html.studio-theme-dark body .ws-topbar,
+body.studio-theme-dark .ws-topbar {
+    background-color: rgba(255, 255, 255, .045) !important;
+    border-bottom-color: rgba(255, 255, 255, .10) !important;
+}
+
+/* =============================================================
+   29. 作者徽标：D X → Q Y N（三字母居中 + 四态动画）
+   -------------------------------------------------------------
+   原实现用 .letter-d / .letter-x 两个类各写一套位移：
+     默认 ±8px 并排 → 悬停/固定 ±120px 飞散淡出 → 折叠回弹。
+   改成三字母后用 :nth-child 统一表达，不必给每个字母各写四处。
+   ============================================================= */
+
+/* 默认（收起态）：以中缝为轴等距排列 */
+html body .author-box .dx-letter:nth-child(1) { transform: translateX(-14px); }
+html body .author-box .dx-letter:nth-child(2) { transform: translateX(0); }
+html body .author-box .dx-letter:nth-child(3) { transform: translateX(14px); }
+
+/* 侧栏展开 / 固定：左右两枚向外飞散，中间一枚原地淡出 */
+html body .sidebar:hover .author-box .dx-letter,
+html body .sidebar.is-pinned .author-box .dx-letter {
+    opacity: 0;
+    transition-delay: 0s;
+}
+
+html body .sidebar:hover .author-box .dx-letter:nth-child(1),
+html body .sidebar.is-pinned .author-box .dx-letter:nth-child(1) {
+    transform: translateX(-130px);
+}
+
+html body .sidebar:hover .author-box .dx-letter:nth-child(3),
+html body .sidebar.is-pinned .author-box .dx-letter:nth-child(3) {
+    transform: translateX(130px);
+}
+
+/* 折叠回弹：恢复三字母并排 */
+html body .sidebar.is-collapsing:hover .author-box .dx-letter {
+    opacity: 1;
+}
+
+html body .sidebar.is-collapsing:hover .author-box .dx-letter:nth-child(1) { transform: translateX(-14px); }
+html body .sidebar.is-collapsing:hover .author-box .dx-letter:nth-child(2) { transform: translateX(0); }
+html body .sidebar.is-collapsing:hover .author-box .dx-letter:nth-child(3) { transform: translateX(14px); }
+
+/* =============================================================
+   30. 侧栏品牌 Logo：圆点 → qianyuniao 鸟形徽标
+   -------------------------------------------------------------
+   原设计是"描边环 + 中心圆点"，悬停/固定时整环旋转 90° 并变圆。
+   换成位图 Logo 后做了三处适配：
+     1. 环状描边不再需要（Logo 自身就是视觉主体）；
+     2. 旋转/变圆对位图不成立，改为放大 + 紫色光晕作为悬停反馈；
+     3. 图片 150×150，鸟形徽标占 y12~112、下方 "QIANYUNIAO"
+        字样占 y113~128 —— 在 36px 贴片里那行字只有约 4px 高，
+        会糊成噪点，所以按比例放大到 147% 并上移，只保留鸟形。
+   ============================================================= */
+
+html body .logo-ring {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(124, 92, 255, .42);
+    border-radius: 11px;
+    /* 徽标本身是菱形轮廓、四角透明，需要一层底衬才撑得起视觉重量 */
+    background-image: linear-gradient(145deg, rgba(124, 92, 255, .24) 0%, rgba(34, 211, 238, .10) 100%);
+    background-color: rgba(124, 92, 255, .10);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12),
+                0 4px 14px rgba(114, 72, 245, .18);
+    padding: 0;
+    /* 旋转 360° 用 ease-out，收尾更稳；显式写缓动，不依赖 --fluid-ease 是否存在 */
+    transition: transform .70s cubic-bezier(.22, 1, .36, 1),
+                border-color .30s ease,
+                box-shadow .30s ease;
+}
+
+html body .logo-ring .logo-img {
+    width: 84%;
+    height: 84%;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
+    transition: transform .3s var(--fluid-ease);
+}
+
+/* 悬停 / 固定：整枚徽章旋转一整圈并放大
+   转满 360°，所以静止时鸟形仍是正位，不会横过来；
+   圆角保持 11px（原作会同时变圆，位图旋转时会被裁掉菱形四角）。 */
+html body .sidebar:hover .logo-ring,
+html body .sidebar.is-pinned .logo-ring,
+html body .logo-ring:hover,
+html body .logo-ring:focus-visible {
+    transform: rotate(360deg) scale(1.10);
+    border-radius: 11px;
+    /* 必须显式重写：原作的 .logo-ring:hover 用了 background 简写，
+       会把紫色渐变一起清掉，导致旋转过程中底色突然变暗 */
+    background-color: rgba(124, 92, 255, .18);
+    background-image: linear-gradient(145deg, rgba(124, 92, 255, .34) 0%, rgba(34, 211, 238, .14) 100%);
+    border-color: rgba(124, 92, 255, .72);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .16),
+                0 0 0 3px rgba(114, 72, 245, .26),
+                0 8px 22px rgba(114, 72, 245, .30);
+    outline: none;
+}
+
+/* =============================================================
+   31. 侧栏导航分区：功能组 / 设置组 两块独立包裹
+   -------------------------------------------------------------
+   原来 8 个功能项和 7 个设置项连成一整列，缩放后挤在一起分不清边界
+   （设置组只有一条 1px 分隔线，还是贴在"素材库"下面）。
+   改成两个玻璃面板，用色调区分职责：
+     · 上组 nav        = 功能导航（中性玻璃）
+     · 下组 side-actions = 设置与系统项（紫色调玻璃）
+   两块之间用 margin-bottom 保底 14px 间距，空间不足也不会贴在一起。
+   ============================================================= */
+
+/* 上组：功能导航（深色） */
+html body .sidebar nav {
+    width: calc(100% - 12px);
+    padding: 8px 0;
+    margin-bottom: 14px;
+    border: 1px solid rgba(255, 255, 255, .10);
+    border-radius: 16px;
+    background-color: rgba(255, 255, 255, .04);
+    transition: border-color .2s ease, background-color .2s ease;
+}
+
+html body .sidebar nav:hover {
+    border-color: rgba(255, 255, 255, .16);
+    background-color: rgba(255, 255, 255, .06);
+}
+
+/* 下组：设置与系统项（深色，紫色调） */
+html body .sidebar .side-actions {
+    width: calc(100% - 12px);
+    padding: 10px 0;
+    gap: 8px;
+    border: 1px solid rgba(124, 92, 255, .24);
+    border-radius: 16px;
+    background-color: rgba(124, 92, 255, .09);
+    background-image: linear-gradient(180deg, rgba(124, 92, 255, .15) 0%, rgba(34, 211, 238, .05) 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07);
+}
+
+/* 浅色主题：白玻璃 / 淡紫玻璃 */
+html:not(.studio-theme-dark) body .sidebar nav {
+    border-color: rgba(23, 32, 51, .10);
+    background-color: rgba(255, 255, 255, .55);
+}
+
+html:not(.studio-theme-dark) body .sidebar nav:hover {
+    border-color: rgba(23, 32, 51, .16);
+    background-color: rgba(255, 255, 255, .72);
+}
+
+html:not(.studio-theme-dark) body .sidebar .side-actions {
+    border-color: rgba(114, 72, 245, .18);
+    background-color: rgba(114, 72, 245, .06);
+    background-image: linear-gradient(180deg, rgba(114, 72, 245, .09) 0%, rgba(14, 116, 144, .04) 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .85);
+}
+
+/* =============================================================
+   32. 侧栏一 / 二级菜单层级
+   -------------------------------------------------------------
+   「本地功能」是一级分组标题，其下的文生图 / 细节增强 / 图片编辑 /
+   角度控制是二级项，但两者外观完全一样，看不出从属关系。改法：
+     · 一级 nav-fold-toggle = 带紫色底色的"分组标题行"，字重 800
+     · 二级 nav-fold-group   = 内嵌子列表面板：左侧紫色强调条 +
+       内凹底色 + 圆角，并把图标 23→19px、字号 15.5→14.5px
+   几何尺寸对明暗通用，仅文字色随主题切换（避免浅色下用到近白字）。
+   ============================================================= */
+
+/* ---------- 一级：分组标题行 ---------- */
+html body .nav-fold-toggle {
+    background-color: rgba(124, 92, 255, .10);
+    border-color: rgba(124, 92, 255, .22);
+}
+
+html body .nav-fold-toggle:hover {
+    background-color: rgba(124, 92, 255, .17);
+    border-color: rgba(124, 92, 255, .38);
+}
+
+html body .nav-fold-toggle .nav-text {
+    font-weight: 800;
+}
+
+/* ---------- 二级：内嵌子列表面板 ---------- */
+html body .nav-fold-group {
+    box-sizing: border-box;
+    width: calc(100% - 16px);
+    padding: 5px 8px;
+    border-left: 2px solid rgba(124, 92, 255, .45);
+    border-radius: 0 12px 12px 0;
+    background-color: rgba(124, 92, 255, .06);
+}
+
+/* 二级项：更窄的胶囊 + 更小的图标与字号 = 视觉降一级 */
+html body .nav-fold-group .nav-item {
+    width: 46px;
+    flex: 0 0 46px;
+    margin: 5px 0;
+    border-radius: 13px;
+    padding-left: 13.5px;   /* 19px 图标在 46px 宽度里居中 */
+}
+
+html body .sidebar:hover .nav-fold-group .nav-item,
+
+html body .nav-fold-group .nav-item svg {
+    width: 19px !important;
+    height: 19px !important;
+}
+
+html body .nav-fold-group .nav-item .nav-text {
+    font-size: 14.5px;
+    font-weight: 600;
+}
+
+/* ---------- 文字色随主题 ---------- */
+html.studio-theme-dark body .nav-fold-toggle {
+    color: #eceaf6;
+}
+
+html:not(.studio-theme-dark) body .nav-fold-toggle {
+    color: #111318;
+}
+
+html.studio-theme-dark body .nav-fold-group .nav-item {
+    color: var(--v-dim);
+}
+
+html:not(.studio-theme-dark) body .nav-fold-group .nav-item {
+    color: #3f4757;
+}
+
+/* =============================================================
+   33. 一级菜单统一尺寸与垂直节奏
+   -------------------------------------------------------------
+   问题：「本地功能」是折叠按钮（.nav-fold-toggle），原本只有
+   36px 高、字号 15px、上下间距 4px，而其它一级项（.nav-item）
+   是 48px / 15.5px / 7px —— 两者混排看起来大小不一、节奏乱。
+   这里把一级项收敛成同一套规格：
+     高度 48px · 圆角 18px · 字号 15.5px · 左内边距 12.5px · 上下间距 7px
+   折叠箭头保持在 20px（它是操作指示，跟着 23px 图标会显得笨重）。
+   ============================================================= */
+
+html body .nav-fold-toggle {
+    height: 48px;
+    flex: 0 0 48px;
+    margin: 7px 0;
+    padding-left: 12.5px;
+    border-radius: 18px;
+}
+
+html body .nav-fold-toggle .nav-text {
+    font-size: 15.5px;
+    font-weight: 800;
+}
+
+html body .nav-fold-toggle .nav-fold-icon {
+    width: 20px !important;
+    height: 20px !important;
+    flex: 0 0 auto;
+}
+
+/* 子列表面板的上下间距与一级项同一节奏：7px + 7px = 14px，
+   和两个相邻一级项之间的间距完全一致。 */
+html body .nav-fold-group {
+    margin: 7px 0;
+}
+
+/* 收起时必须把 margin 和 padding 一起清掉：
+   max-height:0 只能压掉「内容高度」，压不掉这两样 ——
+     · margin 照样占位；
+     · padding 也压不掉：border-box 下边框盒的最小高度就是 padding 之和，
+       实测收起后分组仍有 8px 残高。
+   两者不清，就会看到「本地功能 → 在线生图」比其它间距大一倍。 */
+html body .nav-fold-group.is-collapsed {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+/* =============================================================
+   34. 菜单间距收紧（一级 14 → 8px，二级 10 → 6px）
+   -------------------------------------------------------------
+   上一节把「本地功能」拉齐到 48px 后，间距仍沿用旧的 7+7=14px，
+   在 48px 胶囊之间显得过于松散。这里整体收紧约 40%：
+     一级项   7px → 4px   （间距 14px → 8px）
+     折叠按钮 7px → 4px   （与一级项完全一致）
+     子面板   7px → 4px
+     二级项   5px → 3px   （间距 10px → 6px，比一级再紧一档）
+
+   同时把折叠按钮的高度/圆角接入原有响应式断点：
+   之前写死了 48px，而 760px / 660px 以下的窗口里一级项会缩到
+   42px / 38px，折叠按钮却还是 48px —— 矮窗口下又会重新出现
+   "大小不统一"。所以三级断点各给一套等高值。
+   ============================================================= */
+
+html body .nav-item,
+html body .nav-fold-toggle {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+html body .nav-fold-group {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+/* 二级项比一级项再紧一档（6px），层级差异靠间距也读得出来 */
+html body .nav-fold-group .nav-item {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+/* logo 与导航之间 24 → 18px（首屏留白少一点，导航更聚拢） */
+html body .logo-ring {
+    margin-bottom: 18px !important;
+}
+
+/* ---------- 响应式：折叠按钮跟随一级项缩放 ---------- */
+@media (max-height: 760px) {
+    html body .nav-fold-toggle {
+        height: 42px;
+        flex: 0 0 42px;
+        margin-top: 3px;
+        margin-bottom: 3px;
+        border-radius: 15px;
+    }
+
+    html body .nav-item,
+    html body .nav-fold-group {
+        margin-top: 3px;
+        margin-bottom: 3px;
+    }
+
+    html body .logo-ring {
+        margin-bottom: 14px !important;
+    }
+}
+
+@media (max-height: 660px) {
+    html body .nav-fold-toggle {
+        height: 38px;
+        flex: 0 0 38px;
+        margin-top: 2px;
+        margin-bottom: 2px;
+        border-radius: 14px;
+    }
+
+    html body .nav-item,
+    html body .nav-fold-group {
+        margin-top: 2px;
+        margin-bottom: 2px;
+    }
+
+    html body .logo-ring {
+        margin-bottom: 10px !important;
+    }
+}
+
+/* =============================================================
+   35. 消除「本地功能 → 在线生图」的超大间距
+   -------------------------------------------------------------
+   这一段间距偏大有两个独立原因，都修掉：
+
+   1) index.html:1520 在分组与第一个一级项之间插了一条分隔线：
+        <div style="width:32px;height:1px;...;margin:8px auto;"></div>
+      它的内联上下 margin 各 8px，把这段撑成
+        4 + 8 + 1 + 8 + 4 = 25px
+      而普通两项之间只有 4 + 4 = 8px —— 就是你箭头指的那处"太大"。
+      把它的上下 margin 归零（内联样式必须用 !important 才压得过），
+      分隔线本身保留，正好落在 8px 间距的正中间，读起来是一条细分隔线。
+
+   2) 项目在 @media (max-height:760px / 660px) 里又写了一次
+        .nav-fold-group { max-height: 720px; }
+      位置在 .is-collapsed { max-height: 0 } 之后，把收起态覆盖掉了：
+      矮窗口下「收起」只剩 opacity:0 —— 子项看不见，但 216px 的高度仍在
+      占位，分组下方会凭空多出一大块空白（实测 rect.h = 172.8px）。
+      这里用 !important 把收起态钉死，任何窗口高度下都真正收掉。
+   ============================================================= */
+
+/* 注意选择器写法：不能用 [style*="height:1px"] 单一依赖内联字符串 ——
+   浏览器重写内联 style 时会重新序列化成 "height: 1px"（带空格），
+   属性选择器随即失配（实测间距会从 9px 弹回 25px）。
+   所以主选择器用「nav 下没有 class 的 div」，再补两种字符串写法兜底。 */
+html body .sidebar nav > div:not([class]),
+html body .sidebar nav > div[style*="height:1px"],
+html body .sidebar nav > div[style*="height: 1px"] {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+html body .nav-fold-group.is-collapsed {
+    max-height: 0 !important;
+}
+
+/* ---------- 18.4 卡片：紫调描边 + 悬浮发光 ---------- */
+html.studio-theme-dark body .console-card,
+html.studio-theme-dark body .nano-input,
+html.studio-theme-dark body .upload-item,
+html.studio-theme-dark body .result-frame,
+html.studio-theme-dark body .masonry-item,
+html.studio-theme-dark body .tool-panel,
+html.studio-theme-dark body .control-panel,
+html.studio-theme-dark body .engine-panel,
+html.studio-theme-dark body .model-panel,
+html.studio-theme-dark body .gate-panel,
+html.studio-theme-dark body .setting-row,
+html.studio-theme-dark body .work-panel,
+html.studio-theme-dark body .composer,
+html.studio-theme-dark body .history-popover,
+html.studio-theme-dark body .canvas-item,
+html.studio-theme-dark body .canvas-open,
+html.studio-theme-dark body .thread-item,
+html.studio-theme-dark body .lightbox-card,
+html.studio-theme-dark body #lightboxCard,
+body.studio-theme-dark .console-card,
+body.studio-theme-dark .nano-input,
+body.studio-theme-dark .upload-item,
+body.studio-theme-dark .result-frame,
+body.studio-theme-dark .masonry-item,
+body.studio-theme-dark .tool-panel,
+body.studio-theme-dark .control-panel,
+body.studio-theme-dark .engine-panel,
+body.studio-theme-dark .model-panel,
+body.studio-theme-dark .gate-panel,
+body.studio-theme-dark .setting-row,
+body.studio-theme-dark .work-panel,
+body.studio-theme-dark .composer,
+body.studio-theme-dark .history-popover,
+body.studio-theme-dark .canvas-item,
+body.studio-theme-dark .canvas-open,
+body.studio-theme-dark .thread-item,
+body.studio-theme-dark .lightbox-card,
+body.studio-theme-dark #lightboxCard {
+    border-color: var(--v-violet-line) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .035),
+                0 10px 30px rgba(4, 3, 10, .55) !important;
+}
+
+html.studio-theme-dark body .upload-item:hover,
+html.studio-theme-dark body .upload-item.drag-over,
+html.studio-theme-dark body .masonry-item:hover,
+html.studio-theme-dark body .canvas-item:hover,
+html.studio-theme-dark body .canvas-open:hover,
+html.studio-theme-dark body .console-card:hover,
+body.studio-theme-dark .upload-item:hover,
+body.studio-theme-dark .upload-item.drag-over,
+body.studio-theme-dark .masonry-item:hover,
+body.studio-theme-dark .canvas-item:hover,
+body.studio-theme-dark .canvas-open:hover,
+body.studio-theme-dark .console-card:hover {
+    border-color: var(--v-violet-line-hi) !important;
+    box-shadow: 0 0 0 1px rgba(139, 92, 246, .18),
+                0 16px 44px rgba(124, 92, 255, .24) !important;
+}
+
+/* 参考图里图标方块是紫调描边，这里同步到上传槽位 */
+html.studio-theme-dark body .upload-item,
+body.studio-theme-dark .upload-item {
+    background-color: rgba(16, 16, 25, .72) !important;
+    border-style: dashed !important;
+    border-color: rgba(139, 92, 246, .30) !important;
+}
+
+/* ---------- 18.5 字号再上一档（对齐参考图的字号比例） ---------- */
+html body [class~="text-[9px]"] {
+    font-size: 12.5px !important;
+}
+
+html body [class~="text-[10px]"] {
+    font-size: 13.5px !important;
+}
+
+html body [class~="text-[11px]"] {
+    font-size: 14px !important;
+}
+
+html body .text-xs {
+    font-size: 14px !important;
+}
+
+html body .text-sm {
+    font-size: 15.5px !important;
+}
+
+html body .control-label {
+    font-size: 13.5px !important;
+}
+
+html body .model-option {
+    font-size: 13.5px !important;
+    height: 42px !important;
+}
+
+html body .size-select,
+html body .size-custom {
+    font-size: 14px !important;
+    height: 42px !important;
+}
+
+html body .size-fit-btn {
+    font-size: 13px !important;
+    height: 42px !important;
+}
+
+html body .mode-badge {
+    font-size: 12px !important;
+}
+
+html body .setting-title {
+    font-size: 14px !important;
+}
+
+html body .setting-meta,
+html body .label-nano {
+    font-size: 13px !important;
+}
+
+/* 面板内边距随字号一起放大，避免文字贴边 */
+html body .tool-panel,
+html body .control-panel {
+    padding: 14px !important;
+}
+
+/* =============================================================
+   36. 一级 / 二级菜单的文字色阶
+   -------------------------------------------------------------
+   问题：实测（深色主题）一级「在线生图」与二级「细节增强」的文字色
+   完全相同 —— 都是 var(--v-dim) = #a4a4bd，对比度也都是 8.13:1。
+   二级字号更小、字重更轻，配上同一个色就显得又暗又没层级，
+   于是"展开后看不出和一级有什么区别"。
+
+   这里用色阶把层级做实，两级都提亮到清晰可读：
+
+                     深色主题     对比度     浅色主题
+     一级项          #d9d9e8     12.4:1     #2b3240
+     一级 hover      #f2f0fb     14.6:1     #0f172a
+     二级项          #b0b0c8      9.4:1     #4a5464
+     二级 hover      #dcdcec     12.4:1     #1f2733
+
+   选择器说明：
+   · 一级用 nav > .nav-item —— 只命中分组外的一级项，
+     二级项嵌在 .nav-fold-group 里，天然不会被误伤。
+   · 全部加 :not(.active)，把"当前页面"的紫色高亮让出来，
+     否则同级特异度下会把激活态的 --v-accent-hi 压成灰白。
+   ============================================================= */
+
+html.studio-theme-dark body nav > .nav-item:not(.active) {
+    color: #d9d9e8 !important;
+}
+
+html.studio-theme-dark body nav > .nav-item:not(.active):hover {
+    color: #f2f0fb !important;
+}
+
+html.studio-theme-dark body .nav-fold-group .nav-item:not(.active) {
+    color: #b0b0c8 !important;
+}
+
+html.studio-theme-dark body .nav-fold-group .nav-item:not(.active):hover {
+    color: #dcdcec !important;
+}
+
+html:not(.studio-theme-dark) body nav > .nav-item:not(.active) {
+    color: #2b3240 !important;
+}
+
+html:not(.studio-theme-dark) body nav > .nav-item:not(.active):hover {
+    color: #0f172a !important;
+}
+
+html:not(.studio-theme-dark) body .nav-fold-group .nav-item:not(.active) {
+    color: #4a5464 !important;
+}
+
+html:not(.studio-theme-dark) body .nav-fold-group .nav-item:not(.active):hover {
+    color: #1f2733 !important;
+}
+
+/* =============================================================
+   37. 二级菜单重新设计：内嵌列表（去胶囊化 + 树状引导线）
+   -------------------------------------------------------------
+   根本原因：第 22 节的"玻璃胶囊"规则用的是一个大名单
+     :is(.nav-fold-toggle, .side-pill, .nav-item, ...)
+   而二级项也是 .nav-item，于是它拿到与一级**完全相同**的
+   1px 内描边 + 渐变底 + 阴影 + 磨砂 —— 所以展开后看着就是
+   一组同级按钮，怎么调字号字色都出不来层次。
+
+   重设计思路：把"层级"交给形状，而不是只交给文字大小或颜色。
+     一级 = 玻璃胶囊卡片：48px 高 · 圆角 18px · 有描边 + 渐变底 + 阴影
+     二级 = 内嵌列表行  ：40px 高 · 圆角 11px · 无描边 / 无渐变 / 无阴影
+                           图标 17px、文字 13.5px（一级是 23px / 15.5px）
+     整组收进一个浅紫圆角面板，并从一级图标中线垂一条渐隐引导线，
+     形成「父项 → 子项」的树状阅读路径。
+   ============================================================= */
+
+/* ---------- 37.1 子面板：不画整块底，让每个子项自带包裹框 ---------- */
+/* 这里刻意保持透明：如果外面再套一层面板底色，子项的框会和面板的框
+   叠成"框里框"，看上去反而像一整个大块。层级改由
+   「子项各自的扁平小卡 + 缩进 + 树状引导线」来表达。 */
+html body .sidebar .nav-fold-group {
+    position: relative;
+    box-sizing: border-box;
+    /* 固定宽度，不用 width:100%。
+       父容器（nav）的宽度由最大的子项决定，而二级项又想要父容器的宽度，
+       形成循环依赖；不同环境解析结果不同 —— 实测会得到极小值，
+       整组二级项缩成一条细缝。
+       这里改成与一级项同宽的固定值，并左对齐：
+       收起时露图标（文字被 nav 的 overflow-x:hidden 自然裁掉），
+       展开时文字完整显示 —— 全程不需要任何状态判断。 */
+    /* 宽度同样"三件套"钉死，并 overflow: visible。
+       实测：矮窗口断点下本组的 width 会被更高优先级的规则顶掉，分组缩到
+       约 20px，里面的子项方框被裁成一条"月牙"细缝 —— 这才是"改坏了"的真凶
+       （子项自身的 width 加了 !important 也没用，因为裁剪来自父级）。
+       裁剪统一交给 nav 的 overflow-x: hidden，本组不自己做裁剪。 */
+    width: 190px !important;
+    min-width: 190px !important;
+    max-width: 190px !important;
+    flex: 0 0 auto !important;     /* 列方向容器里 flex-basis 控的是高度，别给长度 */
+    align-self: flex-start;
+    align-items: flex-start;       /* 子项从分组左缘排起：收起时图标才落在侧栏可视区内 */
+    overflow: visible;
+    padding: 0;
+    margin: 4px 0;
+    border-left: 0;
+    background-color: transparent;
+}
+
+/* 树状引导线：组内边距为 0，left:24px 即绝对 x 24px，
+   正好是一级图标的中线（12.5 + 23/2 = 24）。
+   只在侧栏展开时显示 —— 收起态（48px）二级图标也落在 x=24 上，
+   画线会直接穿过图标。 */
+html body .sidebar .nav-fold-group::before {
+    content: '';
+    position: absolute;
+    left: 4px;                     /* 落在子项左右各 8px 的空隙里 */
+    top: 10px;
+    bottom: 10px;
+    width: 1px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .24s ease;
+    background: linear-gradient(180deg,
+        rgba(124, 92, 255, 0) 0%,
+        rgba(124, 92, 255, .40) 16%,
+        rgba(124, 92, 255, .40) 84%,
+        rgba(124, 92, 255, 0) 100%);
+}
+
+html body .sidebar:hover .nav-fold-group::before,
+html body .sidebar.is-pinned .nav-fold-group::before {
+    opacity: 1;
+}
+
+/* ---------- 37.2 二级项：去胶囊化，变成列表行 ---------- */
+html body .sidebar .nav-fold-group .nav-item {
+    /* 宽度交给容器（align-self: stretch），**不依赖 hover / is-pinned 等
+       任何状态条件**。之前用「状态类 + 百分比宽度」，在部分环境下算不出
+       正确值，子项会缩成小方块、名字被 overflow:hidden 裁掉。
+       分组容器：收起约 80px → 项宽 40px（图标恰好居中）；
+                 展开约 190px → 项宽 150px（比一级 190px 窄，层级仍在）。 */
+    /* 收起态固定 40px（干净的小方块）；展开态由下面那条状态规则加宽到 174px。
+       不用 calc(100%) / align-self: stretch —— 两者都依赖「容器宽度」，
+       实测在部分环境下算不出正确值（整组缩成一条细缝）。 */
+    /* 宽度"三件套"全部 !important：实测在部分环境下 width 会被更高优先级的
+       规则顶掉，方框只剩 padding 撑出的约 19px —— 看上去就是一条"月牙"细缝，
+       图标也被横向挤扁。把宽 / 最小宽 / 最大宽一起钉死，从根上消除这类覆盖。 */
+    width: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+    flex: 0 0 auto !important;     /* 列方向 flex 容器里 flex-basis 控的是高度，别写长度 */
+    height: 44px;
+    margin: 4px 8px;
+    padding: 0 10px 0 12px;        /* 图标 20px 居中：(44−20)/2 = 12 */
+    box-sizing: border-box !important;
+    overflow: hidden;              /* 收起态靠它把名字裁干净，不会漏出文字残片 */
+    border-radius: 13px;
+    /* 每个子项都有自己的包裹框。一级是"玻璃卡片"（高光内描边 + 投影），
+       二级是"扁平小卡"——各自成框，但明显更轻，层级照样读得出来。 */
+    background-color: rgba(124, 92, 255, .13) !important;
+    background-image: none !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06) !important;
+    border: 1px solid rgba(124, 92, 255, .26) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    /* 与一级 .nav-item 完全同步：宽度 0.3s var(--fluid-ease)、收起态延迟 0.5s；
+       底色 / 描边不参与过渡 —— 一级也是瞬时切换，避免"底色流动"。 */
+    transition: width .3s var(--fluid-ease) .5s,
+                height .3s var(--fluid-ease) .5s;
+}
+
+/* 浅色主题：框底与描边单独调一档，避免在白底上显脏或看不见 */
+html:not(.studio-theme-dark) body .sidebar .nav-fold-group .nav-item {
+    background-color: rgba(124, 92, 255, .08) !important;
+    border-color: rgba(124, 92, 255, .30) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .55) !important;
+}
+
+/* 展开态：把方框加宽到 174px（= 分组 190px − 8×2），名字落在框内。
+   覆盖四种展开方式；即使一条都没命中，上面 item 的 overflow: visible
+   也能保证名字可见（只是方框不会跟着变宽）。 */
+/* 展开条件与项目原本完全一致：:hover + .is-pinned（+ .is-collapsing:hover）。
+   这里**不能**加 :focus-within —— 点过菜单后焦点会残留，鼠标移开时
+   一级项已经收窄、二级却还张着，看起来就是"关闭动画不同步"。 */
+html body .sidebar:hover .nav-fold-group .nav-item,
+html body .sidebar.is-pinned .nav-fold-group .nav-item,
+html body .sidebar.is-collapsing:hover .nav-fold-group .nav-item {
+    /* 展开后整体放大：宽 174→178，行高 44→50，排版更舒展。
+       行高与宽度走同一条过渡曲线，展开时不跳变。 */
+    width: 178px !important;
+    min-width: 178px !important;
+    max-width: 178px !important;
+    height: 50px !important;
+    flex: 0 0 auto !important;     /* 只改宽度：列方向的 flex-basis 会变成高度 */
+    transition-delay: 0s !important;   /* 展开时立即开始，与一级同步 */
+}
+
+/* 二级菜单名称：面板展开后**一直显示**。
+   · opacity 不跟侧栏状态挂钩 —— 只要侧栏是展开的，文字就不透明；
+   · max-width/overflow 一并放开 —— 防止被任何"折叠时才隐藏"的
+     宽度规则裁掉（收起态它会被 40px 宽的方块 + overflow:hidden 自然裁掉，
+     看不见；展开后则完整显示）。 */
+html body .nav-fold-group .nav-text {
+    max-width: none !important;    /* 允许按内容自然宽度排布 */
+}
+
+html body .sidebar .nav-fold-group .nav-item svg {
+    width: 22px !important;
+    height: 22px !important;
+    flex: 0 0 22px !important;     /* 防止方框变窄时图标被横向挤扁成一条细线 */
+}
+
+html body .sidebar .nav-fold-group .nav-item .nav-text {
+    margin-left: 13px;             /* 图标 22 + 13 → 文字起点 47px：展开后更舒展 */
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* ---------- 37.4 展开动画：文字级联淡入 ----------
+   收起时文字本来就被裁掉（40px 方框 + overflow:hidden），所以让它
+   「淡入 + 左移归位」不会影响收起态；再按子项下标错开延迟，
+   展开时自上而下依次浮现，而不是整组一起跳出来。 */
+html body .sidebar .nav-fold-group .nav-item .nav-text {
+    opacity: 0;
+    transition: opacity .3s .5s;   /* 与一级 .nav-text 同参数 */
+}
+
+/* 必须 !important：项目基础样式里有 .nav-text { opacity: 0 }，
+   且侧栏折叠/展开两套规则互相覆盖，不加会被压回 0 —— 展开后名字仍然看不见。
+   延迟用 0.1s，与一级 .sidebar:hover .nav-text 完全一致。 */
+html body .sidebar:hover .nav-fold-group .nav-item .nav-text,
+html body .sidebar.is-pinned .nav-fold-group .nav-item .nav-text {
+    opacity: 1 !important;
+    transition-delay: .1s;
+}
+
+/* ---------- 37.3 二级项：悬浮 / 激活 ---------- */
+/* 悬浮：底色 + 描边瞬时切换、不位移 —— 与一级 .nav-item:hover 的表现一致
+   （一级的 background / color 也不参与过渡），两级鼠标反馈节奏完全相同。 */
+html body .sidebar .nav-fold-group .nav-item:not(.active):hover {
+    background-color: rgba(124, 92, 255, .22) !important;
+    border-color: rgba(124, 92, 255, .44) !important;
+}
+
+html:not(.studio-theme-dark) body .sidebar .nav-fold-group .nav-item:not(.active):hover {
+    background-color: rgba(124, 92, 255, .15) !important;
+    border-color: rgba(124, 92, 255, .46) !important;
+}
+
+html.studio-theme-dark body .sidebar .nav-fold-group .nav-item:not(.active):hover {
+    color: #dcdcec !important;
+}
+
+html:not(.studio-theme-dark) body .sidebar .nav-fold-group .nav-item:not(.active):hover {
+    color: #171923 !important;
+}
+
+/* 激活态：淡紫底 + 左侧短竖条，而不是整块实心紫胶囊 —— 这样
+   它读起来是"被选中的子项"，而不是"又一个主按钮"。
+   深浅两套都给淡紫底 + 紫字，保证深浅主题观感一致。 */
+html.studio-theme-dark body .sidebar .nav-fold-group .nav-item.active {
+    background-color: rgba(124, 92, 255, .20) !important;
+    border-color: rgba(124, 92, 255, .46) !important;
+    color: var(--v-accent-hi) !important;
+}
+
+html:not(.studio-theme-dark) body .sidebar .nav-fold-group .nav-item.active {
+    background-color: rgba(124, 92, 255, .16) !important;
+    border-color: rgba(124, 92, 255, .52) !important;
+    color: #5f36e6 !important;
+}
+
+html body .sidebar .nav-fold-group .nav-item.active {
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
+html body .sidebar .nav-fold-group .nav-item.active svg {
+    stroke: currentColor !important;
+}
+
+html body .sidebar .nav-fold-group .nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 3px;
+    height: 24px;
+    transform: translateY(-50%);
+    border-radius: 0 3px 3px 0;
+    background: linear-gradient(180deg, var(--v-accent-hi), var(--v-accent));
+    /* 切换子项时竖条从中间"长"出来，而不是硬切 */
+    animation: subNavBarIn .26s var(--fluid-ease) both;
+}
+
+@keyframes subNavBarIn {
+    from { transform: translateY(-50%) scaleY(.15); opacity: 0; }
+    to   { transform: translateY(-50%) scaleY(1);   opacity: 1; }
+}
+
+/* =============================================================
+   38. 底部设置面板：一级 / 二级同样分级
+   -------------------------------------------------------------
+   「更多设置」下的三项（白天模式 / 中文 / 工作流设置）与一级项
+   （API 设置 / 更多设置 / 项目主页）用的是同一个 .side-pill，
+   所以外观完全一样，层级同样读不出来。这里套用侧栏导航那套做法：
+
+     一级 .side-actions > .side-pill      = 玻璃胶囊（渐变底 + 亮描边 + 投影）
+     二级 .settings-fold-group .side-pill = 扁平内嵌小卡（淡紫底 + 细描边）
+                                           更矮、更窄、圆角更小 + 树状引导线
+
+   注意 max-height：原上限 132px，矮窗口断点里只有 105px / 102px，
+   而三个子项（30px × 3 + 6px × 2 间距 = 102px）已经贴到上限，
+   稍不留神就被裁掉，所以这里放宽到 160px。
+   ============================================================= */
+
+/* ---------- 38.1 子面板：保留 10px 内缩给引导线 ---------- */
+html body .sidebar .settings-fold-group {
+    position: relative;
+    width: 100%;
+    gap: 6px;
+}
+
+html body .sidebar .settings-fold-group:not(.is-collapsed) {
+    max-height: 160px !important;
+}
+
+/* 树状引导线：子项宽 146px 在组内居中，左右各留约 31px，
+   所以线放在 left:24px —— 正好落在子项左边缘外 7px 的空隙里。
+   只在一级展开时出现。 */
+html body .sidebar .settings-fold-group::before {
+    content: '';
+    position: absolute;
+    left: 6px;                     /* 落在子项左右各 12px 的空隙里 */
+    top: 4px;
+    bottom: 4px;
+    width: 1px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .24s ease;
+    background: linear-gradient(180deg,
+        rgba(124, 92, 255, 0) 0%,
+        rgba(124, 92, 255, .42) 16%,
+        rgba(124, 92, 255, .42) 84%,
+        rgba(124, 92, 255, 0) 100%);
+}
+
+html body .sidebar:hover .settings-fold-group::before,
+html body .sidebar.is-pinned .settings-fold-group::before {
+    opacity: 1;
+}
+
+/* ---------- 38.2 二级项：扁平内嵌小卡 ---------- */
+html body .sidebar .settings-fold-group .side-pill {
+    /* 同二级导航：宽度跟随容器（align-self: stretch），不依赖状态类。
+       .side-actions 内宽：收起约 68px → 项宽 44px；展开约 170px → 146px。 */
+    /* 与一级 .side-pill 同一套做法：固定宽 + 自动居中。
+       原来用 align-self: stretch + 左右 12px margin，实测没生效 ——
+       二级宽度由基础样式兜底（40px+边框），结果比一级还宽、还往左突出。
+       改成钉死宽度后，收起 36px / 展开 146px，都严格窄于一级（40 / 170）。 */
+    width: 36px !important;
+    min-width: 36px !important;
+    max-width: 36px !important;
+    align-self: center;
+    flex: 0 0 auto !important;
+    margin: 3px 0;
+    box-sizing: border-box !important;
+    height: 30px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    background-color: rgba(124, 92, 255, .07) !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border: 1px solid rgba(124, 92, 255, .17) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    transition: width .3s var(--fluid-ease) .5s,
+                gap .3s var(--fluid-ease) .5s;
+}
+
+/* 展开态不再单独设宽度：由上面的 align-self: stretch 跟随 .side-actions，
+   左右各留 12px 内缩，展开后约 146px（比一级胶囊 170px 窄）。 */
+
+html body .sidebar:hover .settings-fold-group .side-pill,
+html body .sidebar.is-pinned .settings-fold-group .side-pill {
+    /* 展开态：146px（一级是 170px），始终窄一档；延迟 0s 与一级同步。
+       必须带状态条件 —— 无条件写会常驻 146px，在收起态直接溢出到侧栏外。 */
+    width: 146px !important;
+    min-width: 146px !important;
+    max-width: 146px !important;
+    transition-delay: 0s;
+}
+
+html body .sidebar .settings-fold-group .side-pill svg {
+    width: 15px !important;
+    height: 15px !important;
+}
+
+html body .sidebar .settings-fold-group .side-pill-text {
+    font-size: 12.5px;
+    font-weight: 600;
+}
+
+html:not(.studio-theme-dark) body .sidebar .settings-fold-group .side-pill {
+    background-color: rgba(124, 92, 255, .055) !important;
+    border-color: rgba(114, 72, 245, .26) !important;
+}
+
+/* ---------- 38.4 二级项图标 / 文字：高对比渐变 ----------
+   问题：二级项用的还是 --muted（很淡的灰），浅色主题上图标几乎看不清。
+   这里换成渐变并整体提亮对比度：
+     浅色主题  图标 + 文字 = 深紫 #5b2ee0 → 蓝 #1d6fe0
+     深色主题  图标 + 文字 = 亮紫 #c3adff → 青 #7ceaff
+
+   两点实现说明：
+   1) 图标（SVG）用 stroke: url(#...) 引用渐变，定义在 index.html 末尾的
+      隐藏 <svg><defs> 里 —— CSS 没办法凭空构造渐变，必须引用已有定义；
+      同时给 color 做兜底，万一引用失败也不会退回成淡灰。
+   2) 文字用 background-clip: text 把渐变裁进字形。background-clip 只作用
+      在"这个元素自己"的背景上，而淡紫底是画在父级 .side-pill 上的，
+      所以不会把胶囊底色一起裁掉。 */
+html:not(.studio-theme-dark) body .sidebar .settings-fold-group .side-pill svg {
+    stroke: url(#qynSubGradLight) !important;
+    color: #5b2ee0 !important;
+}
+
+html.studio-theme-dark body .sidebar .settings-fold-group .side-pill svg {
+    stroke: url(#qynSubGradDark) !important;
+    color: #c3adff !important;
+}
+
+html:not(.studio-theme-dark) body .sidebar .settings-fold-group .side-pill-text {
+    background-image: linear-gradient(180deg, #5b2ee0, #1d6fe0) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+html.studio-theme-dark body .sidebar .settings-fold-group .side-pill-text {
+    background-image: linear-gradient(180deg, #c3adff, #7ceaff) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+/* ---------- 38.3 二级项：悬浮 / 激活 ---------- */
+html body .sidebar .settings-fold-group .side-pill:not(.active):hover {
+    background-color: rgba(124, 92, 255, .16) !important;
+}
+
+html.studio-theme-dark body .sidebar .settings-fold-group .side-pill:not(.active):hover {
+    color: #dcdcec !important;
+}
+
+html:not(.studio-theme-dark) body .sidebar .settings-fold-group .side-pill:not(.active):hover {
+    color: #171923 !important;
+}
+
+html.studio-theme-dark body .sidebar .settings-fold-group .side-pill.active {
+    background-color: rgba(124, 92, 255, .20) !important;
+    border-color: rgba(124, 92, 255, .46) !important;
+    color: var(--v-accent-hi) !important;
+}
+
+html:not(.studio-theme-dark) body .sidebar .settings-fold-group .side-pill.active {
+    background-color: rgba(124, 92, 255, .16) !important;
+    border-color: rgba(114, 72, 245, .52) !important;
+    color: #5f36e6 !important;
+}
+
+html body .sidebar .settings-fold-group .side-pill.active {
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
+html body .sidebar .settings-fold-group .side-pill.active svg {
+    stroke: currentColor !important;
+}
+
+html body .sidebar .settings-fold-group .side-pill.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 3px;
+    height: 14px;
+    transform: translateY(-50%);
+    border-radius: 0 3px 3px 0;
+    background: linear-gradient(180deg, var(--v-accent-hi), var(--v-accent));
+}
