@@ -1,4 +1,4 @@
-# qianyuniao-Canvas · 迁羽鸟画布
+# qianyuniao-Canvas · 千语鸟画布
 
 > 一个功能强大的 AI 无限画布创作工具，支持多模型图像生成、节点式工作流编排与智能素材管理。
 
